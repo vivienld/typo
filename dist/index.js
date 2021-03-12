@@ -119,7 +119,6 @@ var Char = /*#__PURE__*/function (_Component) {
   _proto.play = function play() {
     var _this5 = this;
 
-    console.log(this.props.component);
     var Component = this.props.component(this.props.duration);
     this.setState({
       display: React__default.createElement(Component, null, this.props.children)

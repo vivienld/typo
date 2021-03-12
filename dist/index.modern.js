@@ -94,7 +94,6 @@ class Char extends Component {
   }
 
   play() {
-    console.log(this.props.component);
     const Component = this.props.component(this.props.duration);
     this.setState({
       display: React.createElement(Component, null, this.props.children)

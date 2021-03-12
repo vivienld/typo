@@ -80,7 +80,6 @@ export default class Char extends Component<Props, State> {
     }
 
     play() {
-        console.log(this.props.component);
         const Component = this.props.component(this.props.duration);
         this.setState({
             display: <Component>{this.props.children}</Component>
