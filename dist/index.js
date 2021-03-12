@@ -2,7 +2,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var styled = _interopDefault(require('styled-components'));
+var Style = _interopDefault(require('styled-components'));
 
 function _inheritsLoose(subClass, superClass) {
   subClass.prototype = Object.create(superClass.prototype);
@@ -29,28 +29,19 @@ function _taggedTemplateLiteralLoose(strings, raw) {
   return strings;
 }
 
-var Animation;
-
-(function (Animation) {
-  Animation["base"] = "base";
-  Animation["rotateInVer"] = "rotateInVer";
-})(Animation || (Animation = {}));
-
-var Animation$1 = Animation;
-
 var _templateObject;
 function base() {
-  return styled.span(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["display:inline-block;"])));
+  return Style.span(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["display:inline-block;"])));
 }
 
 var _templateObject$1;
 function rotateInCenter(duration) {
-  return styled.span(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteralLoose(["\n    display:inline-block;\n    @keyframes rotate-in-center{\n        0%{\n            -webkit-transform:rotate(-360deg);\n            transform:rotate(-360deg);\n            opacity:0;\n        }\n            100%{\n                -webkit-transform:rotate(0);\n                transform:rotate(0);\n                opacity:1\n            }\n        }\n    }\n    animation: rotate-in-center ", "s cubic-bezier(.25,.46,.45,.94) both;\n    "])), duration / 1000);
+  return Style.span(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteralLoose(["\n    display:inline-block;\n    @keyframes rotate-in-center{\n        0%{\n            -webkit-transform:rotate(-360deg);\n            transform:rotate(-360deg);\n            opacity:0;\n        }\n            100%{\n                -webkit-transform:rotate(0);\n                transform:rotate(0);\n                opacity:1\n            }\n        }\n    }\n    animation: rotate-in-center ", "s cubic-bezier(.25,.46,.45,.94) both;\n    "])), duration / 1000);
 }
 
 var StyledComponents = function StyledComponents() {};
 StyledComponents.base = base;
-StyledComponents.rotateInVer = rotateInCenter;
+StyledComponents.rotateInCenter = rotateInCenter;
 
 var Char = /*#__PURE__*/function (_Component) {
   _inheritsLoose(Char, _Component);
@@ -70,6 +61,7 @@ var Char = /*#__PURE__*/function (_Component) {
       display: null,
       visibility: 'hidden'
     };
+    _this.baseComponent = StyledComponents.base();
     return _this;
   }
 
@@ -78,54 +70,61 @@ var Char = /*#__PURE__*/function (_Component) {
   _proto.componentDidMount = function componentDidMount() {
     if (this.props.unload) {
       this.unload();
-      console.log('unload');
     } else {
       this.load();
 
       if (this.props.hide) {
         this.hide();
-        console.log('hide');
-      } else if (this.props.animate) {
+      } else if (!this.props.fixed) {
         this.play();
-        console.log('animate');
       }
-
-      console.log('load');
     }
   };
 
   _proto.load = function load() {
-    var Component = StyledComponents.base();
+    var _this2 = this;
+
     this.setState({
-      display: React__default.createElement(Component, null, this.props.children)
+      display: React__default.createElement(this.baseComponent, null, this.props.children)
+    }, function () {
+      _this2.onLoad();
     });
   };
 
   _proto.unload = function unload() {
+    var _this3 = this;
+
     this.setState({
       display: null
+    }, function () {
+      _this3.onUnload();
     });
   };
 
   _proto.hide = function hide() {
-    var Component = StyledComponents.base();
+    var _this4 = this;
+
+    var Component = Style.span(StyledComponents.base());
     this.setState({
       display: React__default.createElement(Component, {
         style: {
           visibility: 'hidden'
         }
       }, this.props.children)
+    }, function () {
+      _this4.onHide();
     });
   };
 
   _proto.play = function play() {
-    var _this2 = this;
+    var _this5 = this;
 
-    var Component = StyledComponents[this.props.animation](this.props.duration);
+    console.log(this.props.component);
+    var Component = this.props.component(this.props.duration);
     this.setState({
       display: React__default.createElement(Component, null, this.props.children)
     }, function () {
-      _this2.onPlay();
+      _this5.onPlay();
     });
   };
 
@@ -135,14 +134,31 @@ var Char = /*#__PURE__*/function (_Component) {
     (_this$props$onPlay = (_this$props = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props, this);
   };
 
+  _proto.onLoad = function onLoad() {
+    var _this$props$onLoad, _this$props2;
+
+    (_this$props$onLoad = (_this$props2 = this.props).onLoad) === null || _this$props$onLoad === void 0 ? void 0 : _this$props$onLoad.call(_this$props2, this);
+  };
+
+  _proto.onUnload = function onUnload() {
+    var _this$props$onUnload, _this$props3;
+
+    (_this$props$onUnload = (_this$props3 = this.props).onUnload) === null || _this$props$onUnload === void 0 ? void 0 : _this$props$onUnload.call(_this$props3, this);
+  };
+
+  _proto.onHide = function onHide() {
+    var _this$props$onHide, _this$props4;
+
+    (_this$props$onHide = (_this$props4 = this.props).onHide) === null || _this$props$onHide === void 0 ? void 0 : _this$props$onHide.call(_this$props4, this);
+  };
+
   return Char;
 }(React.Component);
 Char.defaultProps = {
   duration: 0,
   hide: false,
   unload: false,
-  animate: true,
-  style: Animation$1.base
+  fixed: false
 };
 
 var Text = /*#__PURE__*/function (_Component) {
@@ -161,7 +177,7 @@ var Text = /*#__PURE__*/function (_Component) {
   return Text;
 }(React.Component);
 
-exports.Animation = Animation$1;
 exports.Char = Char;
+exports.StyledComponents = StyledComponents;
 exports.Text = Text;
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,5 @@
-import styled, { StyledComponent } from 'styled-components';
+import Style, { StyledComponent } from 'styled-components'
 
 export default function base(): StyledComponent<"span", any, {}, never> {
-    return styled.span`display:inline-block;`
+    return Style.span`display:inline-block;`
 }

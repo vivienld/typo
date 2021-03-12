@@ -1,7 +1,7 @@
-import styled, { StyledComponent } from 'styled-components';
+import Style, { StyledComponent } from 'styled-components';
 
 export default function rotateInCenter(duration: number): StyledComponent<"span", any, {}, never> {
-    return styled.span`
+    return Style.span`
     display:inline-block;
     @keyframes rotate-in-center{
         0%{

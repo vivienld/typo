@@ -1,15 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import { StyledComponent } from 'styled-components';
-import Animation from './enum/animation';
+import Style, { StyledComponent } from 'styled-components';
 import StyledComponents from './styled-component';
 
 interface Props {
-    duration: number;
     hide: boolean;
-    animate: boolean;
+    fixed: boolean;
     unload: boolean;
-    animation: Animation;
+    duration: number;
+    component: (duration: number) => StyledComponent<"span", any, {}, never>;
     onPlay?: (char: Char) => void;
+    onLoad?: (char: Char) => void;
+    onUnload?: (char: Char) => void;
+    onHide?: (char: Char) => void;
 }
 
 interface State {
@@ -19,7 +21,6 @@ interface State {
 
 export default class Char extends Component<Props, State> {
 
-    styledComponent: StyledComponent<"span", any, {}, never>;
     baseComponent: StyledComponent<"span", any, {}, never>;
     state: State;
 
@@ -27,8 +28,7 @@ export default class Char extends Component<Props, State> {
         duration: 0,
         hide: false,
         unload: false,
-        animate: true,
-        style: Animation.base
+        fixed: false
     }
 
     constructor(props: Props) {
@@ -38,51 +38,50 @@ export default class Char extends Component<Props, State> {
             display: null,
             visibility: 'hidden'
         }
+
+        this.baseComponent = StyledComponents.base();
     }
 
+    /**
+     * On décharge le composant si unload, sinon on le charge, s'il est caché pas besoin de l'animer
+     */
     componentDidMount() {
         if (this.props.unload) {
             this.unload()
-            console.log('unload')
         } else {
             this.load();
-
             if (this.props.hide) {
                 this.hide()
-                console.log('hide')
-            } else if (this.props.animate) {
+            } else if (!this.props.fixed) {
                 this.play()
-                console.log('animate')
             }
-
-            console.log('load')
         }
     }
 
     render = () => <Fragment>{this.state?.display}</Fragment>;
 
     load() {
-        const Component = StyledComponents.base();
         this.setState({
-            display: <Component>{this.props.children}</Component>
-        })
+            display: <this.baseComponent>{this.props.children}</this.baseComponent>
+        }, () => { this.onLoad() })
     }
 
     unload() {
         this.setState({
             display: null
-        })
+        }, () => { this.onUnload() })
     }
 
     hide() {
-        const Component = StyledComponents.base();
+        const Component = Style.span(StyledComponents.base());
         this.setState({
             display: <Component style={{ visibility: 'hidden' }}>{this.props.children}</Component>
-        })
+        }, () => { this.onHide() })
     }
 
     play() {
-        const Component = StyledComponents[this.props.animation](this.props.duration);
+        console.log(this.props.component);
+        const Component = this.props.component(this.props.duration);
         this.setState({
             display: <Component>{this.props.children}</Component>
         }, () => {
@@ -93,4 +92,17 @@ export default class Char extends Component<Props, State> {
     onPlay() {
         this.props.onPlay?.(this);
     }
+
+    onLoad() {
+        this.props.onLoad?.(this);
+    }
+
+    onUnload() {
+        this.props.onUnload?.(this);
+    }
+
+    onHide() {
+        this.props.onHide?.(this);
+    }
+
 }

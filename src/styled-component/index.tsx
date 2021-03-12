@@ -1,7 +1,7 @@
 import base from './base'
-import rotateInVer from './rotate.in.ver'
+import rotateInCenter from './rotate.in.center'
 
 export default class StyledComponents {
     static base = base;
-    static rotateInVer = rotateInVer;
+    static rotateInCenter = rotateInCenter;
 }

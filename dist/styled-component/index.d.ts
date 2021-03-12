@@ -1,6 +1,6 @@
 import base from './base';
-import rotateInVer from './rotate.in.ver';
+import rotateInCenter from './rotate.in.center';
 export default class StyledComponents {
     static base: typeof base;
-    static rotateInVer: typeof rotateInVer;
+    static rotateInCenter: typeof rotateInCenter;
 }
