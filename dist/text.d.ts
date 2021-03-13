@@ -1,11 +1,13 @@
 /// <reference types="node" />
 import { Component } from 'react';
 import { StyledComponent } from 'styled-components';
+import Typo from './typo';
 interface Props {
     pace?: number;
     delay?: number;
     stamp?: boolean;
     rewind?: boolean;
+    parent?: Typo;
     animation?: (duration: number) => StyledComponent<"span", any, {}, never>;
     onStart?: (text: Text) => void;
     onPlay?: (text: Text) => void;

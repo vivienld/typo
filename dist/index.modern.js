@@ -56,7 +56,7 @@ class Text extends Component {
     const Element = ((_this$props$animation = (_this$props = this.props).animation) === null || _this$props$animation === void 0 ? void 0 : _this$props$animation.call(_this$props, this.props.pace || defaultPace)) || Animation.base();
 
     if (!this.props.stamp) {
-      const chars = (this.props.children || '').substr(0, this.iteration + 1).split('');
+      const chars = (this.props.children || '').substr(0, this.iteration + 1).replaceAll(' ', '\xa0').split('');
       this.setState({
         display: chars.map((char, i) => {
           if (i == chars.length - 1) {
@@ -80,10 +80,11 @@ class Text extends Component {
       });
     } else {
       this.setState({
-        display: React.createElement(Element, null, this.props.children || '')
+        display: React.createElement(Element, null, (this.props.children || '').replaceAll(' ', '\xa0'))
       }, () => {
         this.iteration = this.props.rewind ? 0 : this.props.children.length - 1;
         this.onPlay();
+        this.stop();
       });
     }
   }
@@ -106,9 +107,10 @@ class Text extends Component {
   }
 
   onStop() {
-    var _this$props$onStop, _this$props4;
+    var _this$props$onStop, _this$props4, _this$props5, _this$props5$parent;
 
     (_this$props$onStop = (_this$props4 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props4, this);
+    (_this$props5 = this.props) === null || _this$props5 === void 0 ? void 0 : (_this$props5$parent = _this$props5.parent) === null || _this$props5$parent === void 0 ? void 0 : _this$props5$parent.play();
   }
 
   render() {
@@ -119,5 +121,69 @@ class Text extends Component {
 
 }
 
-export { Animation, Text };
+class Typo extends Component {
+  constructor(props) {
+    super(props);
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+    this.texts = React.Children.map(this.props.children, child => {
+      return React.createElement(Text, Object.assign({}, child.props, {
+        parent: this
+      }), child.props.children);
+    });
+  }
+
+  componentDidMount() {
+    this.onStart();
+    this.run();
+  }
+
+  run() {
+    this.play();
+  }
+
+  play() {
+    this.setState({
+      display: this.texts.slice(0, this.iteration + 1)
+    }, () => {
+      this.iteration += this.props.rewind ? -1 : 1;
+
+      if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.texts.length) {
+        this.stop();
+      } else {
+        this.onPlay();
+      }
+    });
+  }
+
+  stop() {
+    this.onStop();
+  }
+
+  onStart() {
+    var _this$props$onStart, _this$props;
+
+    (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
+  }
+
+  onPlay() {
+    var _this$props$onPlay, _this$props2;
+
+    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+  }
+
+  onStop() {
+    var _this$props$onStop, _this$props3;
+
+    (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
+  }
+
+  render() {
+    var _this$state;
+
+    return React.createElement(React.Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
+  }
+
+}
+
+export { Animation, Text, Typo };
 //# sourceMappingURL=index.modern.js.map

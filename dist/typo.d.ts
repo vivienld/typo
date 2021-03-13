@@ -1,43 +1,24 @@
 import { Component } from 'react';
-import { StyledComponent } from 'styled-components';
 interface Props {
-    value: string;
-    hide: boolean;
-    fixed: boolean;
-    unload: boolean;
-    duration: number;
-    component: (duration: number) => StyledComponent<"span", any, {}, never>;
+    rewind?: boolean;
+    onStart?: (typo: Typo) => void;
     onPlay?: (typo: Typo) => void;
-    onLoad?: (typo: Typo) => void;
-    onUnload?: (typo: Typo) => void;
-    onHide?: (typo: Typo) => void;
+    onStop?: (typo: Typo) => void;
 }
 interface State {
-    display: JSX.Element | null;
-    visibility: 'hidden' | 'visible';
+    display: JSX.Element[] | JSX.Element;
 }
 export default class Typo extends Component<Props, State> {
-    baseComponent: StyledComponent<"span", any, {}, never>;
-    state: State;
-    static defaultProps: {
-        duration: number;
-        hide: boolean;
-        unload: boolean;
-        fixed: boolean;
-    };
+    texts: JSX.Element[];
+    iteration: number;
     constructor(props: Props);
-    /**
-     * On décharge le composant si unload, sinon on le charge, s'il est caché pas besoin de l'animer
-     */
     componentDidMount(): void;
-    render: () => JSX.Element;
+    run(): void;
     play(): void;
-    load(): void;
-    unload(): void;
-    hide(): void;
+    stop(): void;
+    onStart(): void;
     onPlay(): void;
-    onLoad(): void;
-    onUnload(): void;
-    onHide(): void;
+    onStop(): void;
+    render(): JSX.Element;
 }
 export {};
