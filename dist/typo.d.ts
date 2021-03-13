@@ -1,21 +1,22 @@
 import { Component } from 'react';
 import { StyledComponent } from 'styled-components';
 interface Props {
+    value: string;
     hide: boolean;
     fixed: boolean;
     unload: boolean;
     duration: number;
     component: (duration: number) => StyledComponent<"span", any, {}, never>;
-    onPlay?: (char: Char) => void;
-    onLoad?: (char: Char) => void;
-    onUnload?: (char: Char) => void;
-    onHide?: (char: Char) => void;
+    onPlay?: (typo: Typo) => void;
+    onLoad?: (typo: Typo) => void;
+    onUnload?: (typo: Typo) => void;
+    onHide?: (typo: Typo) => void;
 }
 interface State {
     display: JSX.Element | null;
     visibility: 'hidden' | 'visible';
 }
-export default class Char extends Component<Props, State> {
+export default class Typo extends Component<Props, State> {
     baseComponent: StyledComponent<"span", any, {}, never>;
     state: State;
     static defaultProps: {

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Style from 'styled-components';
 
 let _ = t => t,
@@ -29,117 +29,95 @@ function rotateInCenter(duration) {
     `), duration / 1000);
 }
 
-class StyledComponents {}
-StyledComponents.base = base;
-StyledComponents.rotateInCenter = rotateInCenter;
+class Animation {}
+Animation.base = base;
+Animation.rotateInCenter = rotateInCenter;
 
-class Char extends Component {
+const defaultPace = 40;
+const defaultDelay = 0;
+class Text extends Component {
   constructor(props) {
     super(props);
-
-    this.render = () => {
-      var _this$state;
-
-      return React.createElement(Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
-    };
-
-    this.state = {
-      display: null,
-      visibility: 'hidden'
-    };
-    this.baseComponent = StyledComponents.base();
   }
 
   componentDidMount() {
-    if (this.props.unload) {
-      this.unload();
-    } else {
-      this.load();
+    setTimeout(() => this.run(), this.props.delay || defaultDelay);
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+    this.onStart();
+  }
 
-      if (this.props.hide) {
-        this.hide();
-      } else if (!this.props.fixed) {
-        this.play();
-      }
-    }
+  run() {
+    this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
   }
 
   play() {
-    const Component = this.props.component(this.props.duration);
-    this.setState({
-      display: React.createElement(Component, null, this.props.children)
-    }, () => {
-      this.onPlay();
-    });
-  }
+    var _this$props$animation, _this$props;
 
-  load() {
-    this.setState({
-      display: React.createElement(this.baseComponent, null, this.props.children)
-    }, () => {
-      this.onLoad();
-    });
-  }
+    const Element = ((_this$props$animation = (_this$props = this.props).animation) === null || _this$props$animation === void 0 ? void 0 : _this$props$animation.call(_this$props, this.props.pace || defaultPace)) || Animation.base();
 
-  unload() {
-    this.setState({
-      display: null
-    }, () => {
-      this.onUnload();
-    });
-  }
+    if (!this.props.stamp) {
+      const chars = (this.props.children || '').substr(0, this.iteration + 1).split('');
+      this.setState({
+        display: chars.map((char, i) => {
+          if (i == chars.length - 1) {
+            return React.createElement(Element, {
+              key: i
+            }, char);
+          } else {
+            return React.createElement("span", {
+              key: i
+            }, char);
+          }
+        })
+      }, () => {
+        this.iteration += this.props.rewind ? -1 : 1;
 
-  hide() {
-    const Component = Style.span(StyledComponents.base());
-    this.setState({
-      display: React.createElement(Component, {
-        style: {
-          visibility: 'hidden'
+        if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > (this.props.children || '').length) {
+          this.stop();
+        } else {
+          this.onPlay();
         }
-      }, this.props.children)
-    }, () => {
-      this.onHide();
-    });
+      });
+    } else {
+      this.setState({
+        display: React.createElement(Element, null, this.props.children || '')
+      }, () => {
+        this.iteration = this.props.rewind ? 0 : this.props.children.length - 1;
+        this.onPlay();
+      });
+    }
+  }
+
+  stop() {
+    clearInterval(this.interval);
+    this.onStop();
+  }
+
+  onStart() {
+    var _this$props$onStart, _this$props2;
+
+    (_this$props$onStart = (_this$props2 = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props2, this);
   }
 
   onPlay() {
-    var _this$props$onPlay, _this$props;
+    var _this$props$onPlay, _this$props3;
 
-    (_this$props$onPlay = (_this$props = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props, this);
+    (_this$props$onPlay = (_this$props3 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props3, this);
   }
 
-  onLoad() {
-    var _this$props$onLoad, _this$props2;
+  onStop() {
+    var _this$props$onStop, _this$props4;
 
-    (_this$props$onLoad = (_this$props2 = this.props).onLoad) === null || _this$props$onLoad === void 0 ? void 0 : _this$props$onLoad.call(_this$props2, this);
+    (_this$props$onStop = (_this$props4 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props4, this);
   }
 
-  onUnload() {
-    var _this$props$onUnload, _this$props3;
-
-    (_this$props$onUnload = (_this$props3 = this.props).onUnload) === null || _this$props$onUnload === void 0 ? void 0 : _this$props$onUnload.call(_this$props3, this);
-  }
-
-  onHide() {
-    var _this$props$onHide, _this$props4;
-
-    (_this$props$onHide = (_this$props4 = this.props).onHide) === null || _this$props$onHide === void 0 ? void 0 : _this$props$onHide.call(_this$props4, this);
-  }
-
-}
-Char.defaultProps = {
-  duration: 0,
-  hide: false,
-  unload: false,
-  fixed: false
-};
-
-class Text extends Component {
   render() {
-    return React.createElement("div", null);
+    var _this$state;
+
+    return React.createElement(React.Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
   }
 
 }
 
-export { Char, StyledComponents, Text };
+export { Animation, Text };
 //# sourceMappingURL=index.modern.js.map

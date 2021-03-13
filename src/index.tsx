@@ -1,9 +1,7 @@
-import Char from './char'
 import Text from './text'
-import StyledComponents from './styled-component'
+import Animation from './animation'
 
 export {
-  Char,
   Text,
-  StyledComponents
+  Animation
 }
