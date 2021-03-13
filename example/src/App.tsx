@@ -6,11 +6,10 @@ const App = () => {
 
 
   return (
-    <Typo
+    <Typo rewind
       onStart={(typo) => console.log(typo + ' typo start')}
       onPlay={(typo) => console.log(typo + ' typo play')}
       onStop={(typo) => console.log(typo + ' typo stop')}
-      rewind
     >
       <Text pace={1000} animation={Animation.rotateInCenter}
         onStart={(text) => console.log(text + 'text start')}

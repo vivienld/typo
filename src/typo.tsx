@@ -41,25 +41,19 @@ export default class Typo extends Component<Props, State> {
     }
 
     play() {
-        if (this.props.rewind) {
-            for (let i = 0; i <= this.iteration; i++) {
-                this.textRefs[i].current?.show();
-            }
-
-            this.textRefs[this.iteration]?.current?.run();
-
-        } else {
-            this.textRefs[this.iteration]?.current?.run();
-        }
-
-        this.iteration += this.props.rewind ? -1 : 1;
-
         if (
-            (this.props.rewind && this.iteration < -1) ||
-            (!this.props.rewind && this.iteration > this.texts.length)
-        ) {
+            (this.props.rewind && this.iteration < 0) || (!this.props.rewind && this.iteration > this.texts.length - 1)) {
             this.stop();
         } else {
+            if (this.props.rewind) {
+                for (let i = this.iteration; i >= 0; i--) {
+                    this.textRefs[i].current?.show();
+                }
+            }
+
+            this.textRefs[this.iteration].current?.run();
+
+            this.iteration += this.props.rewind ? -1 : 1;
             this.onPlay();
         }
     }

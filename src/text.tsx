@@ -24,6 +24,8 @@ interface State {
 
 export default class Text extends Component<Props, State> {
 
+    private initiated: boolean;
+
     interval: NodeJS.Timeout;
     iteration: number;
 
@@ -32,15 +34,23 @@ export default class Text extends Component<Props, State> {
     }
 
     componentDidMount() {
+        this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
+
         if (!this.props.parent) {
-            setTimeout(() => this.run(), this.props.delay || defaultDelay);
+            this.run();
         }
     }
-    
+
+
     run() {
-        this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
-        this.onStart();
-        this.interval = setInterval((() => this.play()), this.props.pace || defaultPace)
+
+        if (!this.initiated) {
+            this.onStart();
+            this.initiated = true;
+            setTimeout(() => { this.play(); this.run(); }, this.props.delay || defaultDelay);
+        } else {
+            this.interval = setInterval((() => this.play()), this.props.pace || defaultPace)
+        }
     }
 
     play() {
@@ -86,7 +96,7 @@ export default class Text extends Component<Props, State> {
 
     stop() {
         clearInterval(this.interval);
-        this.onStop();
+            this.onStop();
     }
 
     onStart() {
@@ -101,6 +111,7 @@ export default class Text extends Component<Props, State> {
         this.props.onStop?.(this);
         this.props?.parent?.play();
     }
+
     render() {
         return <React.Fragment>{this.state?.display}</React.Fragment>
     }

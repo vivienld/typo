@@ -41,15 +41,24 @@ class Text extends Component {
   }
 
   componentDidMount() {
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+
     if (!this.props.parent) {
-      setTimeout(() => this.run(), this.props.delay || defaultDelay);
+      this.run();
     }
   }
 
   run() {
-    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
-    this.onStart();
-    this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
+    if (!this.initiated) {
+      this.onStart();
+      this.initiated = true;
+      setTimeout(() => {
+        this.play();
+        this.run();
+      }, this.props.delay || defaultDelay);
+    } else {
+      this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
+    }
   }
 
   play() {
@@ -155,27 +164,21 @@ class Typo extends Component {
   }
 
   play() {
-    if (this.props.rewind) {
-      var _this$textRefs$this$i, _this$textRefs$this$i2;
-
-      for (let i = 0; i <= this.iteration; i++) {
-        var _this$textRefs$i$curr;
-
-        (_this$textRefs$i$curr = this.textRefs[i].current) === null || _this$textRefs$i$curr === void 0 ? void 0 : _this$textRefs$i$curr.show();
-      }
-
-      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.run();
-    } else {
-      var _this$textRefs$this$i3, _this$textRefs$this$i4;
-
-      (_this$textRefs$this$i3 = this.textRefs[this.iteration]) === null || _this$textRefs$this$i3 === void 0 ? void 0 : (_this$textRefs$this$i4 = _this$textRefs$this$i3.current) === null || _this$textRefs$this$i4 === void 0 ? void 0 : _this$textRefs$this$i4.run();
-    }
-
-    this.iteration += this.props.rewind ? -1 : 1;
-
-    if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.texts.length) {
+    if (this.props.rewind && this.iteration < 0 || !this.props.rewind && this.iteration > this.texts.length - 1) {
       this.stop();
     } else {
+      var _this$textRefs$this$i;
+
+      if (this.props.rewind) {
+        for (let i = this.iteration; i >= 0; i--) {
+          var _this$textRefs$i$curr;
+
+          (_this$textRefs$i$curr = this.textRefs[i].current) === null || _this$textRefs$i$curr === void 0 ? void 0 : _this$textRefs$i$curr.show();
+        }
+      }
+
+      (_this$textRefs$this$i = this.textRefs[this.iteration].current) === null || _this$textRefs$this$i === void 0 ? void 0 : _this$textRefs$this$i.run();
+      this.iteration += this.props.rewind ? -1 : 1;
       this.onPlay();
     }
   }

@@ -17,6 +17,7 @@ interface State {
     display: JSX.Element[] | JSX.Element;
 }
 export default class Text extends Component<Props, State> {
+    private initiated;
     interval: NodeJS.Timeout;
     iteration: number;
     constructor(props: Props);
