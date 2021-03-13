@@ -15,6 +15,7 @@ interface State {
 export default class Typo extends Component<Props, State> {
 
     texts: JSX.Element[];
+    textRefs: React.RefObject<Text>[] = [];
     iteration: number;
 
     constructor(props: Props) {
@@ -22,7 +23,10 @@ export default class Typo extends Component<Props, State> {
         this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
 
         this.texts = React.Children.map(this.props.children as JSX.Element, child => {
-            return <Text {...child.props} parent={this}>{child.props.children}</Text>
+            let ref = React.createRef<Text>();
+            this.textRefs.push(ref);
+
+            return <Text {...child.props} ref={ref} parent={this} rewind={this.props.rewind}>{child.props.children}</Text>
         })
 
     }
@@ -37,19 +41,27 @@ export default class Typo extends Component<Props, State> {
     }
 
     play() {
-        this.setState({
-            display: this.texts.slice(0, this.iteration + 1)
-        }, () => {
-            this.iteration += this.props.rewind ? -1 : 1;
-            if (
-                (this.props.rewind && this.iteration < -1) ||
-                (!this.props.rewind && this.iteration > this.texts.length)
-            ) {
-                this.stop();
-            } else {
-                this.onPlay();
+        if (this.props.rewind) {
+            for (let i = 0; i <= this.iteration; i++) {
+                this.textRefs[i].current?.show();
             }
-        })
+
+            this.textRefs[this.iteration]?.current?.run();
+
+        } else {
+            this.textRefs[this.iteration]?.current?.run();
+        }
+
+        this.iteration += this.props.rewind ? -1 : 1;
+
+        if (
+            (this.props.rewind && this.iteration < -1) ||
+            (!this.props.rewind && this.iteration > this.texts.length)
+        ) {
+            this.stop();
+        } else {
+            this.onPlay();
+        }
     }
 
     stop() {
@@ -69,6 +81,6 @@ export default class Typo extends Component<Props, State> {
     }
 
     render() {
-        return <React.Fragment>{this.state?.display}</React.Fragment>
+        return <React.Fragment>{this.texts}</React.Fragment>
     }
 }

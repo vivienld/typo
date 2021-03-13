@@ -66,16 +66,18 @@ var Text = /*#__PURE__*/function (_Component) {
   _proto.componentDidMount = function componentDidMount() {
     var _this = this;
 
-    setTimeout(function () {
-      return _this.run();
-    }, this.props.delay || defaultDelay);
-    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
-    this.onStart();
+    if (!this.props.parent) {
+      setTimeout(function () {
+        return _this.run();
+      }, this.props.delay || defaultDelay);
+    }
   };
 
   _proto.run = function run() {
     var _this2 = this;
 
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+    this.onStart();
     this.interval = setInterval(function () {
       return _this2.play();
     }, this.props.pace || defaultPace);
@@ -124,6 +126,12 @@ var Text = /*#__PURE__*/function (_Component) {
     }
   };
 
+  _proto.show = function show() {
+    this.setState({
+      display: React__default.createElement("span", null, this.props.children)
+    });
+  };
+
   _proto.stop = function stop() {
     clearInterval(this.interval);
     this.onStop();
@@ -164,10 +172,17 @@ var Typo = /*#__PURE__*/function (_Component) {
     var _this;
 
     _this = _Component.call(this, props) || this;
+    _this.textRefs = [];
     _this.iteration = !_this.props.rewind ? 0 : (_this.props.children || '').length - 1;
     _this.texts = React__default.Children.map(_this.props.children, function (child) {
+      var ref = React__default.createRef();
+
+      _this.textRefs.push(ref);
+
       return React__default.createElement(Text, Object.assign({}, child.props, {
-        parent: _assertThisInitialized(_this)
+        ref: ref,
+        parent: _assertThisInitialized(_this),
+        rewind: _this.props.rewind
       }), child.props.children);
     });
     return _this;
@@ -185,19 +200,29 @@ var Typo = /*#__PURE__*/function (_Component) {
   };
 
   _proto.play = function play() {
-    var _this2 = this;
+    if (this.props.rewind) {
+      var _this$textRefs$this$i, _this$textRefs$this$i2;
 
-    this.setState({
-      display: this.texts.slice(0, this.iteration + 1)
-    }, function () {
-      _this2.iteration += _this2.props.rewind ? -1 : 1;
+      for (var i = 0; i <= this.iteration; i++) {
+        var _this$textRefs$i$curr;
 
-      if (_this2.props.rewind && _this2.iteration < -1 || !_this2.props.rewind && _this2.iteration > _this2.texts.length) {
-        _this2.stop();
-      } else {
-        _this2.onPlay();
+        (_this$textRefs$i$curr = this.textRefs[i].current) === null || _this$textRefs$i$curr === void 0 ? void 0 : _this$textRefs$i$curr.show();
       }
-    });
+
+      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.run();
+    } else {
+      var _this$textRefs$this$i3, _this$textRefs$this$i4;
+
+      (_this$textRefs$this$i3 = this.textRefs[this.iteration]) === null || _this$textRefs$this$i3 === void 0 ? void 0 : (_this$textRefs$this$i4 = _this$textRefs$this$i3.current) === null || _this$textRefs$this$i4 === void 0 ? void 0 : _this$textRefs$this$i4.run();
+    }
+
+    this.iteration += this.props.rewind ? -1 : 1;
+
+    if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.texts.length) {
+      this.stop();
+    } else {
+      this.onPlay();
+    }
   };
 
   _proto.stop = function stop() {
@@ -223,9 +248,7 @@ var Typo = /*#__PURE__*/function (_Component) {
   };
 
   _proto.render = function render() {
-    var _this$state;
-
-    return React__default.createElement(React__default.Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
+    return React__default.createElement(React__default.Fragment, null, this.texts);
   };
 
   return Typo;

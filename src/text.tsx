@@ -32,12 +32,14 @@ export default class Text extends Component<Props, State> {
     }
 
     componentDidMount() {
-        setTimeout(() => this.run(), this.props.delay || defaultDelay);
+        if (!this.props.parent) {
+            setTimeout(() => this.run(), this.props.delay || defaultDelay);
+        }
+    }
+    
+    run() {
         this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
         this.onStart();
-    }
-
-    run() {
         this.interval = setInterval((() => this.play()), this.props.pace || defaultPace)
     }
 
@@ -74,6 +76,12 @@ export default class Text extends Component<Props, State> {
                 this.stop();
             })
         }
+    }
+
+    show() {
+        this.setState({
+            display: <span>{this.props.children}</span>
+        })
     }
 
     stop() {

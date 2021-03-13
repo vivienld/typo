@@ -6,16 +6,21 @@ const App = () => {
 
 
   return (
-    <Typo>
+    <Typo
+      onStart={(typo) => console.log(typo + ' typo start')}
+      onPlay={(typo) => console.log(typo + ' typo play')}
+      onStop={(typo) => console.log(typo + ' typo stop')}
+      rewind
+    >
       <Text pace={1000} animation={Animation.rotateInCenter}
-        onStart={(text) => console.log(text + ' start')}
-        onPlay={(text) => console.log(text + ' play')}
-        onStop={(text) => console.log(text + ' stop')}
+        onStart={(text) => console.log(text + 'text start')}
+        onPlay={(text) => console.log(text + 'text play')}
+        onStop={(text) => console.log(text + 'text stop')}
       >bonjour </Text>
       <Text pace={1000}
-        onStart={(text) => console.log(text + ' start')}
-        onPlay={(text) => console.log(text + ' play')}
-        onStop={(text) => console.log(text + ' stop')}
+        onStart={(text) => console.log(text + 'text start')}
+        onPlay={(text) => console.log(text + 'text play')}
+        onStop={(text) => console.log(text + 'text stop')}
       >monde</Text>
     </Typo>
   )

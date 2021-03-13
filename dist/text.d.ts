@@ -23,6 +23,7 @@ export default class Text extends Component<Props, State> {
     componentDidMount(): void;
     run(): void;
     play(): void;
+    show(): void;
     stop(): void;
     onStart(): void;
     onPlay(): void;

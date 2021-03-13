@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import Text from './text';
 interface Props {
     rewind?: boolean;
     onStart?: (typo: Typo) => void;
@@ -10,6 +11,7 @@ interface State {
 }
 export default class Typo extends Component<Props, State> {
     texts: JSX.Element[];
+    textRefs: React.RefObject<Text>[];
     iteration: number;
     constructor(props: Props);
     componentDidMount(): void;

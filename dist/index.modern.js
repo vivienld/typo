@@ -41,12 +41,14 @@ class Text extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.run(), this.props.delay || defaultDelay);
-    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
-    this.onStart();
+    if (!this.props.parent) {
+      setTimeout(() => this.run(), this.props.delay || defaultDelay);
+    }
   }
 
   run() {
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+    this.onStart();
     this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
   }
 
@@ -89,6 +91,12 @@ class Text extends Component {
     }
   }
 
+  show() {
+    this.setState({
+      display: React.createElement("span", null, this.props.children)
+    });
+  }
+
   stop() {
     clearInterval(this.interval);
     this.onStop();
@@ -124,10 +132,15 @@ class Text extends Component {
 class Typo extends Component {
   constructor(props) {
     super(props);
+    this.textRefs = [];
     this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
     this.texts = React.Children.map(this.props.children, child => {
+      let ref = React.createRef();
+      this.textRefs.push(ref);
       return React.createElement(Text, Object.assign({}, child.props, {
-        parent: this
+        ref: ref,
+        parent: this,
+        rewind: this.props.rewind
       }), child.props.children);
     });
   }
@@ -142,17 +155,29 @@ class Typo extends Component {
   }
 
   play() {
-    this.setState({
-      display: this.texts.slice(0, this.iteration + 1)
-    }, () => {
-      this.iteration += this.props.rewind ? -1 : 1;
+    if (this.props.rewind) {
+      var _this$textRefs$this$i, _this$textRefs$this$i2;
 
-      if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.texts.length) {
-        this.stop();
-      } else {
-        this.onPlay();
+      for (let i = 0; i <= this.iteration; i++) {
+        var _this$textRefs$i$curr;
+
+        (_this$textRefs$i$curr = this.textRefs[i].current) === null || _this$textRefs$i$curr === void 0 ? void 0 : _this$textRefs$i$curr.show();
       }
-    });
+
+      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.run();
+    } else {
+      var _this$textRefs$this$i3, _this$textRefs$this$i4;
+
+      (_this$textRefs$this$i3 = this.textRefs[this.iteration]) === null || _this$textRefs$this$i3 === void 0 ? void 0 : (_this$textRefs$this$i4 = _this$textRefs$this$i3.current) === null || _this$textRefs$this$i4 === void 0 ? void 0 : _this$textRefs$this$i4.run();
+    }
+
+    this.iteration += this.props.rewind ? -1 : 1;
+
+    if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.texts.length) {
+      this.stop();
+    } else {
+      this.onPlay();
+    }
   }
 
   stop() {
@@ -178,9 +203,7 @@ class Typo extends Component {
   }
 
   render() {
-    var _this$state;
-
-    return React.createElement(React.Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
+    return React.createElement(React.Fragment, null, this.texts);
   }
 
 }
