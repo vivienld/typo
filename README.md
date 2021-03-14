@@ -182,7 +182,7 @@ Those props will be used by every `Text` child that don't define them.
     <tr>
       <td>rewind?</td>
       <td>boolean</td>
-      <td>Prints the chars in the Texts backwards</td>
+      <td>Prints the chars backwards</td>
       <td>false</td>
     </tr>
   </tbody>

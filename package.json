@@ -1,7 +1,7 @@
 {
   "name": "typo",
   "version": "1.0.0",
-  "description": "Made with create-react-library",
+  "description": "Typo is a react library that makes it easy to give your text a typewriter effect.",
   "author": "vivienld",
   "license": "MIT",
   "repository": "vivienld/typo",
@@ -46,5 +46,13 @@
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "react",
+    "typewriter",
+    "type writer",
+    "text",
+    "animation",
+    "text animation"
   ]
 }
