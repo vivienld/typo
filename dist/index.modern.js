@@ -1,30 +1,56 @@
 import React, { Component } from 'react';
 
-const defaultPace = 40;
-const defaultPause = 0;
-const spanStyle = {
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+
+  _setPrototypeOf(subClass, superClass);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+var defaultPace = 40;
+var defaultPause = 0;
+var spanStyle = {
   display: 'inline-block'
 };
-class Text extends Component {
-  constructor(props) {
-    super(props);
-    this.str = (this.props.children || '').replaceAll(' ', '\xa0');
-    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
+
+var Text = /*#__PURE__*/function (_Component) {
+  _inheritsLoose(Text, _Component);
+
+  function Text(props) {
+    var _this;
+
+    _this = _Component.call(this, props) || this;
+    _this.str = (_this.props.children || '').replaceAll(' ', '\xa0');
+    _this.iteration = !_this.props.rewind ? 0 : _this.str.length - 1;
+    return _this;
   }
 
-  componentDidMount() {
+  var _proto = Text.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
     if (!this.props.parent) {
       this.play();
     }
-  }
+  };
 
-  reset() {
+  _proto.reset = function reset() {
     this.stopped = false;
-  }
+  };
 
-  play() {
+  _proto.play = function play() {
+    var _this2 = this;
+
     if (!this.stopped) {
-      let pace;
+      var pace;
 
       if (!this.initiated) {
         var _this$props$parent;
@@ -42,105 +68,112 @@ class Text extends Component {
         pace = this.props.whiteSpacePace || ((_this$props$parent3 = this.props.parent) === null || _this$props$parent3 === void 0 ? void 0 : _this$props$parent3.props.whiteSpacePace) || defaultPace;
       }
 
-      setTimeout(() => {
-        var _this$props$parent4, _this$props$parent5;
+      setTimeout(function () {
+        var _this2$props$parent, _this2$props$parent2;
 
-        const stamp = this.props.stamp || ((_this$props$parent4 = this.props.parent) === null || _this$props$parent4 === void 0 ? void 0 : _this$props$parent4.props.stamp);
-        const rewind = this.props.rewind || ((_this$props$parent5 = this.props.parent) === null || _this$props$parent5 === void 0 ? void 0 : _this$props$parent5.props.rewind);
+        var stamp = _this2.props.stamp || ((_this2$props$parent = _this2.props.parent) === null || _this2$props$parent === void 0 ? void 0 : _this2$props$parent.props.stamp);
+        var rewind = _this2.props.rewind || ((_this2$props$parent2 = _this2.props.parent) === null || _this2$props$parent2 === void 0 ? void 0 : _this2$props$parent2.props.rewind);
 
         if (!stamp) {
-          const chars = this.str.substr(0, this.iteration + 1).split('');
-          let display;
+          var chars = _this2.str.substr(0, _this2.iteration + 1).split('');
+
+          var display;
 
           if (rewind) {
-            display = chars.map((char, i) => {
+            display = chars.map(function (_char, i) {
               return React.createElement("span", {
                 style: spanStyle,
                 key: i
-              }, char);
+              }, _char);
             });
             display.pop();
             display.push(React.createElement("span", {
               style: spanStyle,
-              className: this.props.charClassName,
+              className: _this2.props.charClassName,
               key: Date.now()
             }, chars.slice(-1)));
           } else {
-            display = chars.map((char, i) => {
+            display = chars.map(function (_char2, i) {
               return React.createElement("span", {
                 style: spanStyle,
-                className: this.props.charClassName,
+                className: _this2.props.charClassName,
                 key: i
-              }, char);
+              }, _char2);
             });
           }
 
-          this.setState({
-            display
-          }, () => {
-            this.iteration += rewind ? -1 : 1;
+          _this2.setState({
+            display: display
+          }, function () {
+            _this2.iteration += rewind ? -1 : 1;
 
-            if (rewind && this.iteration < -1 || !rewind && this.iteration > this.str.length) {
-              this.stop();
+            if (rewind && _this2.iteration < -1 || !rewind && _this2.iteration > _this2.str.length) {
+              _this2.stop();
             } else {
-              this.onChar();
+              _this2.onChar();
             }
           });
         } else {
-          this.setState({
+          _this2.setState({
             display: React.createElement("span", {
               style: spanStyle,
-              className: this.props.charClassName
-            }, this.str)
-          }, () => {
-            this.iteration = rewind ? 0 : this.props.children.length - 1;
-            this.onChar();
-            this.stop();
+              className: _this2.props.charClassName
+            }, _this2.str)
+          }, function () {
+            _this2.iteration = rewind ? 0 : _this2.props.children.length - 1;
+
+            _this2.onChar();
+
+            _this2.stop();
           });
         }
 
-        this.play();
+        _this2.play();
       }, pace);
     }
-  }
+  };
 
-  show() {
+  _proto.show = function show() {
     this.setState({
-      display: this.str.split('').map((char, i) => React.createElement("span", {
-        style: spanStyle,
-        key: i
-      }, char))
+      display: this.str.split('').map(function (_char3, i) {
+        return React.createElement("span", {
+          style: spanStyle,
+          key: i
+        }, _char3);
+      })
     });
-  }
+  };
 
-  stop() {
+  _proto.stop = function stop() {
     this.onStop();
-  }
+  };
 
-  onStart() {
+  _proto.onStart = function onStart() {
     var _this$props$onStart, _this$props;
 
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
-  }
+  };
 
-  onChar() {
-    var _this$props$parent6, _this$props$onChar, _this$props2, _this$props$parent7, _this$props$parent7$p, _this$props$parent7$p2;
+  _proto.onChar = function onChar() {
+    var _this$props$parent4, _this$props$onChar, _this$props2, _this$props$parent5, _this$props$parent5$p, _this$props$parent5$p2;
 
-    const rewind = ((_this$props$parent6 = this.props.parent) === null || _this$props$parent6 === void 0 ? void 0 : _this$props$parent6.props.rewind) || this.props.rewind;
-    const char = rewind ? this.str[this.iteration + 1] : this.str[this.iteration - 1];
-    (_this$props$onChar = (_this$props2 = this.props).onChar) === null || _this$props$onChar === void 0 ? void 0 : _this$props$onChar.call(_this$props2, char, this);
-    (_this$props$parent7 = this.props.parent) === null || _this$props$parent7 === void 0 ? void 0 : (_this$props$parent7$p = (_this$props$parent7$p2 = _this$props$parent7.props).onChar) === null || _this$props$parent7$p === void 0 ? void 0 : _this$props$parent7$p.call(_this$props$parent7$p2, char, this.props.parent);
-  }
+    var rewind = ((_this$props$parent4 = this.props.parent) === null || _this$props$parent4 === void 0 ? void 0 : _this$props$parent4.props.rewind) || this.props.rewind;
 
-  onStop() {
+    var _char4 = rewind ? this.str[this.iteration + 1] : this.str[this.iteration - 1];
+
+    (_this$props$onChar = (_this$props2 = this.props).onChar) === null || _this$props$onChar === void 0 ? void 0 : _this$props$onChar.call(_this$props2, _char4, this);
+    (_this$props$parent5 = this.props.parent) === null || _this$props$parent5 === void 0 ? void 0 : (_this$props$parent5$p = (_this$props$parent5$p2 = _this$props$parent5.props).onChar) === null || _this$props$parent5$p === void 0 ? void 0 : _this$props$parent5$p.call(_this$props$parent5$p2, _char4, this.props.parent);
+  };
+
+  _proto.onStop = function onStop() {
     var _this$props$onStop, _this$props3, _this$props4, _this$props4$parent;
 
     this.stopped = true;
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
     (_this$props4 = this.props) === null || _this$props4 === void 0 ? void 0 : (_this$props4$parent = _this$props4.parent) === null || _this$props4$parent === void 0 ? void 0 : _this$props4$parent.play();
-  }
+  };
 
-  render() {
+  _proto.render = function render() {
     var _this$state;
 
     return React.createElement("div", {
@@ -149,33 +182,51 @@ class Text extends Component {
         display: this.props.block ? 'block' : 'inline-block'
       }
     }, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
+  };
+
+  return Text;
+}(Component);
+
+var Typo = /*#__PURE__*/function (_Component) {
+  _inheritsLoose(Typo, _Component);
+
+  function Typo(props) {
+    var _this;
+
+    _this = _Component.call(this, props) || this;
+    _this.textRefs = [];
+
+    _this.init();
+
+    return _this;
   }
 
-}
+  var _proto = Typo.prototype;
 
-class Typo extends Component {
-  constructor(props) {
-    super(props);
-    this.textRefs = [];
-    this.init();
-  }
+  _proto.componentDidMount = function componentDidMount() {
+    var _this2 = this;
 
-  componentDidMount() {
-    if (!Array.from(Typo.typos.values()).some(typo => typo.props.next == this.name) || Typo.first == this) {
+    if (!Array.from(Typo.typos.values()).some(function (typo) {
+      return typo.props.next == _this2.name;
+    }) || Typo.first == this) {
       this.play();
     }
-  }
+  };
 
-  init() {
+  _proto.init = function init() {
+    var _this3 = this;
+
     this.initiated = false;
-    this.texts = React.Children.map(this.props.children, child => {
-      let ref = React.createRef();
-      this.textRefs.push(ref);
+    this.texts = React.Children.map(this.props.children, function (child) {
+      var ref = React.createRef();
+
+      _this3.textRefs.push(ref);
+
       console.log(child);
       return React.createElement(Text, Object.assign({}, child.props, {
         ref: ref,
-        parent: this,
-        rewind: this.props.rewind
+        parent: _this3,
+        rewind: _this3.props.rewind
       }), child.props.children || '');
     });
     this.iteration = !this.props.rewind ? 0 : this.texts.length == 1 ? 0 : this.texts.length - 1;
@@ -185,9 +236,9 @@ class Typo extends Component {
     if (typeof Typo.first == 'undefined') {
       Typo.first = this;
     }
-  }
+  };
 
-  play() {
+  _proto.play = function play() {
     if (!this.initiated) {
       this.initiated = true;
       this.onStart();
@@ -199,7 +250,7 @@ class Typo extends Component {
       var _this$textRefs$this$i, _this$textRefs$this$i2;
 
       if (this.props.rewind) {
-        for (let i = this.iteration; i >= 0; i--) {
+        for (var i = this.iteration; i >= 0; i--) {
           var _this$textRefs$i$curr;
 
           (_this$textRefs$i$curr = this.textRefs[i].current) === null || _this$textRefs$i$curr === void 0 ? void 0 : _this$textRefs$i$curr.show();
@@ -210,31 +261,31 @@ class Typo extends Component {
       this.iteration += this.props.rewind ? -1 : 1;
       this.onText();
     }
-  }
+  };
 
-  stop() {
+  _proto.stop = function stop() {
     this.onStop();
-  }
+  };
 
-  onStart() {
+  _proto.onStart = function onStart() {
     var _this$props$onStart, _this$props;
 
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
-  }
+  };
 
-  onText() {
+  _proto.onText = function onText() {
     var _this$textRefs, _this$textRefs2;
 
-    const text = this.props.rewind ? (_this$textRefs = this.textRefs[this.iteration + 1]) === null || _this$textRefs === void 0 ? void 0 : _this$textRefs.current : (_this$textRefs2 = this.textRefs[this.iteration - 1]) === null || _this$textRefs2 === void 0 ? void 0 : _this$textRefs2.current;
+    var text = this.props.rewind ? (_this$textRefs = this.textRefs[this.iteration + 1]) === null || _this$textRefs === void 0 ? void 0 : _this$textRefs.current : (_this$textRefs2 = this.textRefs[this.iteration - 1]) === null || _this$textRefs2 === void 0 ? void 0 : _this$textRefs2.current;
 
     if (text) {
       var _this$props$onText, _this$props2;
 
       (_this$props$onText = (_this$props2 = this.props).onText) === null || _this$props$onText === void 0 ? void 0 : _this$props$onText.call(_this$props2, text, this);
     }
-  }
+  };
 
-  onStop() {
+  _proto.onStop = function onStop() {
     var _this$props$onStop, _this$props3;
 
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
@@ -245,17 +296,18 @@ class Typo extends Component {
       (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.init();
       (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.play();
     }
-  }
+  };
 
-  render() {
+  _proto.render = function render() {
     return React.createElement("div", {
       style: {
         display: 'inline-block'
       }
     }, this.texts);
-  }
+  };
 
-}
+  return Typo;
+}(Component);
 Typo.typos = new Map();
 
 export { Text, Typo };
