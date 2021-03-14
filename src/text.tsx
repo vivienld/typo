@@ -11,6 +11,8 @@ const spanStyle = {
 interface Props {
     /** The pace between two chars in milliseconds. Default is 40 */
     pace?: number;
+    /** The pace of white spaces to make the text more dynamic */
+    whiteSpacePace?: number;
     /** The pause before starting the text in milliseconds. Default is 0 */
     pause?: number;
     /** Defines if the container css display rule is 'block'. Default is 'inline-block' */
@@ -50,6 +52,8 @@ interface State {
 export default class Text extends Component<Props, State> {
 
     private initiated: boolean;
+    private stopped: boolean;
+
     str: string;
     interval: NodeJS.Timeout;
     iteration: number;
@@ -62,63 +66,70 @@ export default class Text extends Component<Props, State> {
 
     componentDidMount() {
         if (!this.props.parent) {
-            this.run();
+            this.play();
         }
     }
 
-
-    run() {
-        const pause = this.props.parent?.props.pause || this.props.pause || defaultPause;
-        const pace = this.props.parent?.props.pace || this.props.pace || defaultPace;
-
-        if (!this.initiated) {
-            this.onStart();
-            this.initiated = true;
-            this.interval = setTimeout(() => { this.play(); this.run(); }, pause);
-        } else {
-            this.interval = setInterval((() => this.play()), pace)
-        }
+    reset() {
+        this.stopped = false;
     }
 
     play() {
-        const stamp = this.props.parent?.props.stamp || this.props.stamp;
-        const rewind = this.props.parent?.props.rewind || this.props.rewind;
-
-        if (!stamp) {
-            const chars = this.str.substr(0, this.iteration + 1).split('');
-            let display;
-
-            if (rewind) {
-                display = chars.map((char, i) => {
-                    return <span style={spanStyle} key={i}>{char}</span>
-                });
-                display.pop();
-                display.push(<span style={spanStyle} className={this.props.charClassName} key={Date.now()}>{chars.slice(-1)}</span>)
+        if (!this.stopped) {
+            let pace;
+            if (!this.initiated) {
+                this.onStart();
+                this.initiated = true;
+                pace = this.props.parent?.props.pause || this.props.pause || defaultPause;
+            } else if (this.str[this.iteration] != '\xa0') {
+                pace = this.props.parent?.props.pace || this.props.pace || defaultPace;
             } else {
-                display = chars.map((char, i) => {
-                    return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
-                });
+                pace = (this.props.parent?.props.whiteSpacePace || this.props.whiteSpacePace || defaultPace);
             }
-            this.setState({ display }, () => {
 
-                this.iteration += rewind ? -1 : 1;
-                if (
-                    (rewind && this.iteration < -1) ||
-                    (!rewind && this.iteration > this.str.length)
-                ) {
-                    this.stop();
+            setTimeout(() => {
+
+                const stamp = this.props.parent?.props.stamp || this.props.stamp;
+                const rewind = this.props.parent?.props.rewind || this.props.rewind;
+            
+                if (!stamp) {
+                    const chars = this.str.substr(0, this.iteration + 1).split('');
+                    let display;
+                
+                    if (rewind) {
+                        display = chars.map((char, i) => {
+                            return <span style={spanStyle} key={i}>{char}</span>
+                        });
+                        display.pop();
+                        display.push(<span style={spanStyle} className={this.props.charClassName} key={Date.now()}>{chars.slice(-1)}</span>)
+                    } else {
+                        display = chars.map((char, i) => {
+                            return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
+                        });
+                    }
+                    this.setState({ display }, () => {
+                    
+                        this.iteration += rewind ? -1 : 1;
+                        if (
+                            (rewind && this.iteration < -1) ||
+                            (!rewind && this.iteration > this.str.length)
+                        ) {
+                            this.stop();
+                        } else {
+                            this.onChar();
+                        }
+                    })
                 } else {
-                    this.onChar();
+                    this.setState({
+                        display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
+                    }, () => {
+                        this.iteration = rewind ? 0 : (this.props.children as string).length - 1;
+                        this.onChar();
+                        this.stop();
+                    })
                 }
-            })
-        } else {
-            this.setState({
-                display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
-            }, () => {
-                this.iteration = rewind ? 0 : (this.props.children as string).length - 1;
-                this.onChar();
-                this.stop();
-            })
+                this.play();
+            }, pace)
         }
     }
 
@@ -129,8 +140,7 @@ export default class Text extends Component<Props, State> {
     }
 
     stop() {
-        clearInterval(this.interval);
-            this.onStop();
+        this.onStop();
     }
 
     onStart() {
@@ -149,6 +159,7 @@ export default class Text extends Component<Props, State> {
     }
 
     onStop() {
+        this.stopped = true;
         this.props.onStop?.(this);
         this.props?.parent?.play();
     }

@@ -9,6 +9,8 @@ interface Props {
     pause?: number;
     /** The pace between two chars in milliseconds. Default is 40 */
     pace?: number;
+    /** The pace of white spaces to make the text more dynamic */
+    whiteSpacePace?: number;
     /**
      * Called when the component is mounted
      * @param typo The current Typo component
@@ -41,7 +43,6 @@ export default class Typo extends Component<Props, State> {
     iteration: number;
     constructor(props: Props);
     componentDidMount(): void;
-    run(): void;
     play(): void;
     stop(): void;
     onStart(): void;

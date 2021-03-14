@@ -10,6 +10,9 @@ interface Props {
     pause?: number;
     /** The pace between two chars in milliseconds. Default is 40 */
     pace?: number;
+    /** The pace of white spaces to make the text more dynamic */
+    whiteSpacePace?: number;
+
     /**
      * Called when the component is mounted
      * @param typo The current Typo component
@@ -59,12 +62,9 @@ export default class Typo extends Component<Props, State> {
 
     componentDidMount() {
         this.onStart();
-        this.run();
-    }
-
-    run() {
         this.play();
     }
+
 
     play() {
         if (
@@ -77,7 +77,7 @@ export default class Typo extends Component<Props, State> {
                 }
             }
             
-            this.textRefs[this.iteration].current?.run();
+            this.textRefs[this.iteration].current?.play();
             
             this.iteration += this.props.rewind ? -1 : 1;
             this.onText();

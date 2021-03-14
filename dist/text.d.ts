@@ -4,6 +4,8 @@ import Typo from './typo';
 interface Props {
     /** The pace between two chars in milliseconds. Default is 40 */
     pace?: number;
+    /** The pace of white spaces to make the text more dynamic */
+    whiteSpacePace?: number;
     /** The pause before starting the text in milliseconds. Default is 0 */
     pause?: number;
     /** Defines if the container css display rule is 'block'. Default is 'inline-block' */
@@ -40,12 +42,13 @@ interface State {
 }
 export default class Text extends Component<Props, State> {
     private initiated;
+    private stopped;
     str: string;
     interval: NodeJS.Timeout;
     iteration: number;
     constructor(props: Props);
     componentDidMount(): void;
-    run(): void;
+    reset(): void;
     play(): void;
     show(): void;
     stop(): void;
