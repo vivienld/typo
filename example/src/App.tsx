@@ -7,7 +7,7 @@ const App = () => {
   return (
     <Typo pause={1000} pace={100}
       onStart={(typo) => console.log(typo + ' typo start')}
-      onPlay={(typo) => console.log(typo + ' typo play')}
+      onText={(text, typo) => console.log(typo + ' text play ' + text)}
       onStop={(typo) => console.log(typo + ' typo stop')}
       onChar={(char, typo) => console.log(typo + ' typo char ' + char)}
     >

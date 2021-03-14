@@ -119,7 +119,7 @@ var Text = /*#__PURE__*/function (_Component) {
         if (rewind && _this3.iteration < -1 || !rewind && _this3.iteration > _this3.str.length) {
           _this3.stop();
         } else {
-          _this3.onPlay();
+          _this3.onChar();
         }
       });
     } else {
@@ -131,7 +131,7 @@ var Text = /*#__PURE__*/function (_Component) {
       }, function () {
         _this3.iteration = rewind ? 0 : _this3.props.children.length - 1;
 
-        _this3.onPlay();
+        _this3.onChar();
 
         _this3.stop();
       });
@@ -160,14 +160,14 @@ var Text = /*#__PURE__*/function (_Component) {
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
   };
 
-  _proto.onPlay = function onPlay() {
-    var _this$props$parent5, _this$props$onPlay, _this$props2, _this$props$parent6, _this$props$parent6$p, _this$props$parent6$p2;
+  _proto.onChar = function onChar() {
+    var _this$props$parent5, _this$props$onChar, _this$props2, _this$props$parent6, _this$props$parent6$p, _this$props$parent6$p2;
 
     var rewind = ((_this$props$parent5 = this.props.parent) === null || _this$props$parent5 === void 0 ? void 0 : _this$props$parent5.props.rewind) || this.props.rewind;
 
     var _char4 = rewind ? this.str[this.iteration + 1] : this.str[this.iteration - 1];
 
-    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+    (_this$props$onChar = (_this$props2 = this.props).onChar) === null || _this$props$onChar === void 0 ? void 0 : _this$props$onChar.call(_this$props2, _char4, this);
     (_this$props$parent6 = this.props.parent) === null || _this$props$parent6 === void 0 ? void 0 : (_this$props$parent6$p = (_this$props$parent6$p2 = _this$props$parent6.props).onChar) === null || _this$props$parent6$p === void 0 ? void 0 : _this$props$parent6$p.call(_this$props$parent6$p2, _char4, this.props.parent);
   };
 
@@ -243,7 +243,7 @@ var Typo = /*#__PURE__*/function (_Component) {
 
       (_this$textRefs$this$i = this.textRefs[this.iteration].current) === null || _this$textRefs$this$i === void 0 ? void 0 : _this$textRefs$this$i.run();
       this.iteration += this.props.rewind ? -1 : 1;
-      this.onPlay();
+      this.onText();
     }
   };
 
@@ -257,10 +257,11 @@ var Typo = /*#__PURE__*/function (_Component) {
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
   };
 
-  _proto.onPlay = function onPlay() {
-    var _this$props$onPlay, _this$props2;
+  _proto.onText = function onText() {
+    var _this$props$onText, _this$props2;
 
-    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+    var text = this.props.rewind ? this.textRefs[this.iteration + 1] : this.textRefs[this.iteration - 1];
+    (_this$props$onText = (_this$props2 = this.props).onText) === null || _this$props$onText === void 0 ? void 0 : _this$props$onText.call(_this$props2, text, this);
   };
 
   _proto.onStop = function onStop() {

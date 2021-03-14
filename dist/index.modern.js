@@ -77,7 +77,7 @@ class Text extends Component {
         if (rewind && this.iteration < -1 || !rewind && this.iteration > this.str.length) {
           this.stop();
         } else {
-          this.onPlay();
+          this.onChar();
         }
       });
     } else {
@@ -88,7 +88,7 @@ class Text extends Component {
         }, this.str)
       }, () => {
         this.iteration = rewind ? 0 : this.props.children.length - 1;
-        this.onPlay();
+        this.onChar();
         this.stop();
       });
     }
@@ -114,12 +114,12 @@ class Text extends Component {
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
   }
 
-  onPlay() {
-    var _this$props$parent5, _this$props$onPlay, _this$props2, _this$props$parent6, _this$props$parent6$p, _this$props$parent6$p2;
+  onChar() {
+    var _this$props$parent5, _this$props$onChar, _this$props2, _this$props$parent6, _this$props$parent6$p, _this$props$parent6$p2;
 
     const rewind = ((_this$props$parent5 = this.props.parent) === null || _this$props$parent5 === void 0 ? void 0 : _this$props$parent5.props.rewind) || this.props.rewind;
     const char = rewind ? this.str[this.iteration + 1] : this.str[this.iteration - 1];
-    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+    (_this$props$onChar = (_this$props2 = this.props).onChar) === null || _this$props$onChar === void 0 ? void 0 : _this$props$onChar.call(_this$props2, char, this);
     (_this$props$parent6 = this.props.parent) === null || _this$props$parent6 === void 0 ? void 0 : (_this$props$parent6$p = (_this$props$parent6$p2 = _this$props$parent6.props).onChar) === null || _this$props$parent6$p === void 0 ? void 0 : _this$props$parent6$p.call(_this$props$parent6$p2, char, this.props.parent);
   }
 
@@ -185,7 +185,7 @@ class Typo extends Component {
 
       (_this$textRefs$this$i = this.textRefs[this.iteration].current) === null || _this$textRefs$this$i === void 0 ? void 0 : _this$textRefs$this$i.run();
       this.iteration += this.props.rewind ? -1 : 1;
-      this.onPlay();
+      this.onText();
     }
   }
 
@@ -199,10 +199,11 @@ class Typo extends Component {
     (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
   }
 
-  onPlay() {
-    var _this$props$onPlay, _this$props2;
+  onText() {
+    var _this$props$onText, _this$props2;
 
-    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+    const text = this.props.rewind ? this.textRefs[this.iteration + 1] : this.textRefs[this.iteration - 1];
+    (_this$props$onText = (_this$props2 = this.props).onText) === null || _this$props$onText === void 0 ? void 0 : _this$props$onText.call(_this$props2, text, this);
   }
 
   onStop() {

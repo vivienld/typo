@@ -9,16 +9,37 @@ const spanStyle = {
 }
 
 interface Props {
+    /** The pace between two chars in milliseconds. Default is 40 */
     pace?: number;
+    /** The pause before starting the text in milliseconds. Default is 0 */
     pause?: number;
+    /** Defines if the container css display rule is 'block'. Default is 'inline-block' */
     block?: boolean;
+    /** Displays all the chars at once */
     stamp?: boolean;
+    /** Prints the chars in the Text backwards */
     rewind?: boolean;
+    /** The Typo controller. Is automatically defined when a Text is in a Typo */
     parent?: Typo;
+    /** The className of the current printed char */
     charClassName?: string;
+    /** The className of the Text container */
     className?: string;
+    /**
+     * Called when the component is mounted
+     * @param text The current Text component
+     * */
     onStart?: (text: Text) => void;
-    onPlay?: (text: Text) => void;
+    /** 
+     * Called when a char is printed 
+     * @param char The current printed char
+     * @param text The current Text component
+     * */
+    onChar?: (char: string, text: Text) => void;
+    /**
+     * Called when the last char is printed
+     * @param text The current Text component
+     * */
     onStop?: (text: Text) => void;
 }
 
@@ -87,7 +108,7 @@ export default class Text extends Component<Props, State> {
                 ) {
                     this.stop();
                 } else {
-                    this.onPlay();
+                    this.onChar();
                 }
             })
         } else {
@@ -95,7 +116,7 @@ export default class Text extends Component<Props, State> {
                 display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
             }, () => {
                 this.iteration = rewind ? 0 : (this.props.children as string).length - 1;
-                this.onPlay();
+                this.onChar();
                 this.stop();
             })
         }
@@ -116,13 +137,13 @@ export default class Text extends Component<Props, State> {
         this.props.onStart?.(this);
     }
 
-    onPlay() {
+    onChar() {
         const rewind = this.props.parent?.props.rewind || this.props.rewind;
         const char = rewind
             ? this.str[this.iteration + 1]
             : this.str[this.iteration - 1];
 
-        this.props.onPlay?.(this);
+        this.props.onChar?.(char, this);
 
         this.props.parent?.props.onChar?.(char, this.props.parent);
     }
