@@ -8,6 +8,10 @@ Typo is a react library that makes it easy to give your text a typewriter effect
 npm install --save typo
 ```
 
+## Example
+
+Example can be seen [here](https://vivienld.github.io/typo/)
+
 ## Basic Usage
 
 ```tsx
