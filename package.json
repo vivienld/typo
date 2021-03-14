@@ -34,7 +34,6 @@
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
-    "@types/styled-components": "^5.1.8",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "gh-pages": "^2.2.0",
@@ -47,8 +46,5 @@
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "styled-components": "^5.2.1"
-  }
+  ]
 }

@@ -2,7 +2,6 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-var Style = _interopDefault(require('styled-components'));
 
 function _inheritsLoose(subClass, superClass) {
   subClass.prototype = Object.create(superClass.prototype);
@@ -28,37 +27,21 @@ function _assertThisInitialized(self) {
   return self;
 }
 
-function _taggedTemplateLiteralLoose(strings, raw) {
-  if (!raw) {
-    raw = strings.slice(0);
-  }
-
-  strings.raw = raw;
-  return strings;
-}
-
-var _templateObject;
-function base() {
-  return Style.span(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["display:inline-block;"])));
-}
-
-var _templateObject$1;
-function rotateInCenter(duration) {
-  return Style.span(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteralLoose(["\n    display:inline-block;\n    @keyframes rotate-in-center{\n        0%{\n            -webkit-transform:rotate(-360deg);\n            transform:rotate(-360deg);\n            opacity:0;\n        }\n            100%{\n                -webkit-transform:rotate(0);\n                transform:rotate(0);\n                opacity:1\n            }\n        }\n    }\n    animation: rotate-in-center ", "s cubic-bezier(.25,.46,.45,.94) both;\n    "])), duration / 1000);
-}
-
-var Animation = function Animation() {};
-Animation.base = base;
-Animation.rotateInCenter = rotateInCenter;
-
 var defaultPace = 40;
 var defaultDelay = 0;
+var spanStyle = {
+  display: 'inline-block'
+};
 
 var Text = /*#__PURE__*/function (_Component) {
   _inheritsLoose(Text, _Component);
 
   function Text(props) {
-    return _Component.call(this, props) || this;
+    var _this;
+
+    _this = _Component.call(this, props) || this;
+    _this.str = (_this.props.children || '').replaceAll(' ', '\xa0');
+    return _this;
   }
 
   var _proto = Text.prototype;
@@ -72,69 +55,80 @@ var Text = /*#__PURE__*/function (_Component) {
   };
 
   _proto.run = function run() {
-    var _this = this;
+    var _this2 = this;
 
     if (!this.initiated) {
       this.onStart();
       this.initiated = true;
       setTimeout(function () {
-        _this.play();
+        _this2.play();
 
-        _this.run();
+        _this2.run();
       }, this.props.delay || defaultDelay);
     } else {
       this.interval = setInterval(function () {
-        return _this.play();
+        return _this2.play();
       }, this.props.pace || defaultPace);
     }
   };
 
   _proto.play = function play() {
-    var _this$props$animation,
-        _this$props,
-        _this2 = this;
-
-    var Element = ((_this$props$animation = (_this$props = this.props).animation) === null || _this$props$animation === void 0 ? void 0 : _this$props$animation.call(_this$props, this.props.pace || defaultPace)) || Animation.base();
+    var _this3 = this;
 
     if (!this.props.stamp) {
-      var chars = (this.props.children || '').substr(0, this.iteration + 1).replaceAll(' ', '\xa0').split('');
+      var chars = this.str.substr(0, this.iteration + 1).split('');
       this.setState({
         display: chars.map(function (_char, i) {
           if (i == chars.length - 1) {
-            return React__default.createElement(Element, {
+            return React__default.createElement("span", {
+              style: spanStyle,
+              className: _this3.props.printClassName,
               key: i
             }, _char);
           } else {
             return React__default.createElement("span", {
+              style: spanStyle,
+              className: _this3.props.charClassName,
               key: i
             }, _char);
           }
         })
       }, function () {
-        _this2.iteration += _this2.props.rewind ? -1 : 1;
+        _this3.iteration += _this3.props.rewind ? -1 : 1;
 
-        if (_this2.props.rewind && _this2.iteration < -1 || !_this2.props.rewind && _this2.iteration > (_this2.props.children || '').length) {
-          _this2.stop();
+        if (_this3.props.rewind && _this3.iteration < -1 || !_this3.props.rewind && _this3.iteration > _this3.str.length) {
+          _this3.stop();
         } else {
-          _this2.onPlay();
+          _this3.onPlay();
         }
       });
     } else {
       this.setState({
-        display: React__default.createElement(Element, null, (this.props.children || '').replaceAll(' ', '\xa0'))
+        display: React__default.createElement("span", {
+          style: spanStyle,
+          className: this.props.printClassName
+        }, this.str)
       }, function () {
-        _this2.iteration = _this2.props.rewind ? 0 : _this2.props.children.length - 1;
+        _this3.iteration = _this3.props.rewind ? 0 : _this3.props.children.length - 1;
 
-        _this2.onPlay();
+        _this3.onPlay();
 
-        _this2.stop();
+        _this3.stop();
       });
     }
   };
 
   _proto.show = function show() {
+    var _this4 = this;
+
     this.setState({
-      display: React__default.createElement("span", null, this.props.children)
+      display: this.str.split('').map(function (_char2, i) {
+        return React__default.createElement("span", {
+          style: spanStyle,
+          className: _this4.props.charClassName,
+          key: i
+        }, _char2);
+      })
     });
   };
 
@@ -144,28 +138,33 @@ var Text = /*#__PURE__*/function (_Component) {
   };
 
   _proto.onStart = function onStart() {
-    var _this$props$onStart, _this$props2;
+    var _this$props$onStart, _this$props;
 
-    (_this$props$onStart = (_this$props2 = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props2, this);
+    (_this$props$onStart = (_this$props = this.props).onStart) === null || _this$props$onStart === void 0 ? void 0 : _this$props$onStart.call(_this$props, this);
   };
 
   _proto.onPlay = function onPlay() {
-    var _this$props$onPlay, _this$props3;
+    var _this$props$onPlay, _this$props2;
 
-    (_this$props$onPlay = (_this$props3 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props3, this);
+    (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
   };
 
   _proto.onStop = function onStop() {
-    var _this$props$onStop, _this$props4, _this$props5, _this$props5$parent;
+    var _this$props$onStop, _this$props3, _this$props4, _this$props4$parent;
 
-    (_this$props$onStop = (_this$props4 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props4, this);
-    (_this$props5 = this.props) === null || _this$props5 === void 0 ? void 0 : (_this$props5$parent = _this$props5.parent) === null || _this$props5$parent === void 0 ? void 0 : _this$props5$parent.play();
+    (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
+    (_this$props4 = this.props) === null || _this$props4 === void 0 ? void 0 : (_this$props4$parent = _this$props4.parent) === null || _this$props4$parent === void 0 ? void 0 : _this$props4$parent.play();
   };
 
   _proto.render = function render() {
     var _this$state;
 
-    return React__default.createElement(React__default.Fragment, null, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
+    return React__default.createElement("div", {
+      className: this.props.textClassName,
+      style: {
+        display: this.props.block ? 'block' : 'inline-block'
+      }
+    }, (_this$state = this.state) === null || _this$state === void 0 ? void 0 : _this$state.display);
   };
 
   return Text;
@@ -254,7 +253,6 @@ var Typo = /*#__PURE__*/function (_Component) {
   return Typo;
 }(React.Component);
 
-exports.Animation = Animation;
 exports.Text = Text;
 exports.Typo = Typo;
 //# sourceMappingURL=index.js.map

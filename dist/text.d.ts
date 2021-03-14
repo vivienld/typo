@@ -1,14 +1,16 @@
 /// <reference types="node" />
 import { Component } from 'react';
-import { StyledComponent } from 'styled-components';
 import Typo from './typo';
 interface Props {
     pace?: number;
     delay?: number;
+    block?: boolean;
     stamp?: boolean;
     rewind?: boolean;
     parent?: Typo;
-    animation?: (duration: number) => StyledComponent<"span", any, {}, never>;
+    printClassName?: string;
+    charClassName?: string;
+    textClassName?: string;
     onStart?: (text: Text) => void;
     onPlay?: (text: Text) => void;
     onStop?: (text: Text) => void;
@@ -18,6 +20,7 @@ interface State {
 }
 export default class Text extends Component<Props, State> {
     private initiated;
+    str: string;
     interval: NodeJS.Timeout;
     iteration: number;
     constructor(props: Props);

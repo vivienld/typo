@@ -1,18 +1,23 @@
 import React, { Component } from 'react'
-import { StyledComponent } from 'styled-components';
-import StyledComponents from './animation';
 import Typo from './typo';
 
 const defaultPace = 40;
 const defaultDelay = 0;
 
+const spanStyle = {
+    display: 'inline-block'
+}
+
 interface Props {
     pace?: number;
     delay?: number;
+    block?: boolean;
     stamp?: boolean;
     rewind?: boolean;
     parent?: Typo;
-    animation?: (duration: number) => StyledComponent<"span", any, {}, never>;
+    printClassName?: string;
+    charClassName?: string;
+    textClassName?: string;
     onStart?: (text: Text) => void;
     onPlay?: (text: Text) => void;
     onStop?: (text: Text) => void;
@@ -25,12 +30,13 @@ interface State {
 export default class Text extends Component<Props, State> {
 
     private initiated: boolean;
-
+    str: string;
     interval: NodeJS.Timeout;
     iteration: number;
 
     constructor(props: Props) {
         super(props);
+        this.str = (this.props.children as string || '').replaceAll(' ', '\xa0');
     }
 
     componentDidMount() {
@@ -54,23 +60,22 @@ export default class Text extends Component<Props, State> {
     }
 
     play() {
-        const Element = this.props.animation?.(this.props.pace || defaultPace) || StyledComponents.base();
 
         if (!this.props.stamp) {
-            const chars = (this.props.children as string || '').substr(0, this.iteration + 1).replaceAll(' ', '\xa0').split('');
+            const chars = this.str.substr(0, this.iteration + 1).split('');
             this.setState({
                 display: chars.map((char, i) => {
                     if (i == chars.length - 1) {
-                        return <Element key={i}>{char}</Element>;
+                        return <span style={spanStyle} className={this.props.printClassName} key={i}>{char}</span>
                     } else {
-                        return <span key={i}>{char}</span>
+                        return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
                     }
                 })
             }, () => {
                 this.iteration += this.props.rewind ? -1 : 1;
                 if (
                     (this.props.rewind && this.iteration < -1) ||
-                    (!this.props.rewind && this.iteration > (this.props.children as string || '').length)
+                    (!this.props.rewind && this.iteration > this.str.length)
                 ) {
                     this.stop();
                 } else {
@@ -79,7 +84,7 @@ export default class Text extends Component<Props, State> {
             })
         } else {
             this.setState({
-                display: <Element>{(this.props.children as string || '').replaceAll(' ', '\xa0')}</Element>
+                display: <span style={spanStyle} className={this.props.printClassName}>{this.str}</span>
             }, () => {
                 this.iteration = this.props.rewind ? 0 : (this.props.children as string).length - 1;
                 this.onPlay();
@@ -90,7 +95,7 @@ export default class Text extends Component<Props, State> {
 
     show() {
         this.setState({
-            display: <span>{this.props.children}</span>
+            display: this.str.split('').map((char, i) => <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>)
         })
     }
 
@@ -113,6 +118,8 @@ export default class Text extends Component<Props, State> {
     }
 
     render() {
-        return <React.Fragment>{this.state?.display}</React.Fragment>
+        return <div className={this.props.textClassName} style={{
+            display: this.props.block ? 'block' : 'inline-block'
+        }}>{this.state?.display}</div>
     }
 }
