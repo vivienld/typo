@@ -19,14 +19,6 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
 var defaultPace = 40;
 var defaultPause = 0;
 var spanStyle = {
@@ -206,30 +198,55 @@ var Typo = /*#__PURE__*/function (_Component) {
 
     _this = _Component.call(this, props) || this;
     _this.textRefs = [];
-    _this.iteration = !_this.props.rewind ? 0 : (_this.props.children || '').length - 1;
-    _this.texts = React__default.Children.map(_this.props.children, function (child) {
-      var ref = React__default.createRef();
 
-      _this.textRefs.push(ref);
+    _this.init();
 
-      console.log(child);
-      return React__default.createElement(Text, Object.assign({}, child.props, {
-        ref: ref,
-        parent: _assertThisInitialized(_this),
-        rewind: _this.props.rewind
-      }), child.props.children || '');
-    });
     return _this;
   }
 
   var _proto = Typo.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    this.onStart();
-    this.play();
+    var _this2 = this;
+
+    if (!Array.from(Typo.typos.values()).some(function (typo) {
+      return typo.props.next == _this2.name;
+    }) || Typo.first == this) {
+      this.play();
+    }
+  };
+
+  _proto.init = function init() {
+    var _this3 = this;
+
+    this.initiated = false;
+    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
+    this.texts = React__default.Children.map(this.props.children, function (child) {
+      var ref = React__default.createRef();
+
+      _this3.textRefs.push(ref);
+
+      console.log(child);
+      return React__default.createElement(Text, Object.assign({}, child.props, {
+        ref: ref,
+        parent: _this3,
+        rewind: _this3.props.rewind
+      }), child.props.children || '');
+    });
+    this.name = this.props.name || '_' + Math.random().toString(36).substr(2, 9);
+    Typo.typos.set(this.name, this);
+
+    if (typeof Typo.first == 'undefined') {
+      Typo.first = this;
+    }
   };
 
   _proto.play = function play() {
+    if (!this.initiated) {
+      this.initiated = true;
+      this.onStart();
+    }
+
     if (this.props.rewind && this.iteration < 0 || !this.props.rewind && this.iteration > this.texts.length - 1) {
       this.stop();
     } else {
@@ -273,6 +290,13 @@ var Typo = /*#__PURE__*/function (_Component) {
     var _this$props$onStop, _this$props3;
 
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
+
+    if (this.props.next) {
+      var _Typo$typos$get, _Typo$typos$get2;
+
+      (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.init();
+      (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.play();
+    }
   };
 
   _proto.render = function render() {
@@ -281,6 +305,7 @@ var Typo = /*#__PURE__*/function (_Component) {
 
   return Typo;
 }(React.Component);
+Typo.typos = new Map();
 
 exports.Text = Text;
 exports.Typo = Typo;

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Text from './text';
 
 interface Props {
+    /** Defines this typo as being the first to execute when this typo's name is in the 'next' prop of another typo */
+    first?: boolean;
     /** Prints the chars in the Texts backwards */
     rewind?: boolean;
     /** Displays all the chars in the Texts at once */
@@ -12,6 +14,10 @@ interface Props {
     pace?: number;
     /** The pace of white spaces to make the text more dynamic */
     whiteSpacePace?: number;
+    /** The name of the next Typo to render */
+    next?: string;
+    /** the name of the typo */
+    name?: string;
 
     /**
      * Called when the component is mounted
@@ -43,30 +49,54 @@ interface State {
 
 export default class Typo extends Component<Props, State> {
 
+    static typos: Map<string, Typo> = new Map();
+    static first: Typo;
+
+    private initiated: boolean;
+    name: string;
     texts: JSX.Element[];
     textRefs: React.RefObject<Text>[] = [];
     iteration: number;
 
     constructor(props: Props) {
         super(props);
-        this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
+        this.init();
+    }
 
+    componentDidMount() {
+        //si le typo est dans le next d'un autre, on ne lance pas play sauf s'il est first
+        if (!Array.from(Typo.typos.values()).some(typo => typo.props.next == this.name) || Typo.first == this) {
+            this.play();
+        }
+    }
+
+    init() {
+        this.initiated = false;
+
+        this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
+        
         this.texts = React.Children.map(this.props.children as JSX.Element, child => {
             let ref = React.createRef<Text>();
             this.textRefs.push(ref);
             console.log(child)
             return <Text {...child.props} ref={ref} parent={this} rewind={this.props.rewind}>{child.props.children || ''}</Text>
         })
+        
+        this.name = this.props.name || '_' + Math.random().toString(36).substr(2, 9);
 
+        Typo.typos.set(this.name, this);
+
+        if (typeof Typo.first == 'undefined') {
+            Typo.first = this;
+        }
     }
-
-    componentDidMount() {
-        this.onStart();
-        this.play();
-    }
-
 
     play() {
+        if (!this.initiated) {
+            this.initiated = true;
+            this.onStart();
+        }
+
         if (
             (this.props.rewind && this.iteration < 0) || (!this.props.rewind && this.iteration > this.texts.length - 1)) {
             this.stop();
@@ -102,8 +132,13 @@ export default class Typo extends Component<Props, State> {
         }
     }
 
+    //on lance le event handler onStop et on lance le play du prochain Typo
     onStop() {
         this.props.onStop?.(this);
+        if (this.props.next) {
+            Typo.typos.get(this.props.next)?.init();
+            Typo.typos.get(this.props.next)?.play();
+        }
     }
 
     render() {

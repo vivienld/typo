@@ -157,6 +157,17 @@ class Typo extends Component {
   constructor(props) {
     super(props);
     this.textRefs = [];
+    this.init();
+  }
+
+  componentDidMount() {
+    if (!Array.from(Typo.typos.values()).some(typo => typo.props.next == this.name) || Typo.first == this) {
+      this.play();
+    }
+  }
+
+  init() {
+    this.initiated = false;
     this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
     this.texts = React.Children.map(this.props.children, child => {
       let ref = React.createRef();
@@ -168,14 +179,20 @@ class Typo extends Component {
         rewind: this.props.rewind
       }), child.props.children || '');
     });
-  }
+    this.name = this.props.name || '_' + Math.random().toString(36).substr(2, 9);
+    Typo.typos.set(this.name, this);
 
-  componentDidMount() {
-    this.onStart();
-    this.play();
+    if (typeof Typo.first == 'undefined') {
+      Typo.first = this;
+    }
   }
 
   play() {
+    if (!this.initiated) {
+      this.initiated = true;
+      this.onStart();
+    }
+
     if (this.props.rewind && this.iteration < 0 || !this.props.rewind && this.iteration > this.texts.length - 1) {
       this.stop();
     } else {
@@ -219,6 +236,13 @@ class Typo extends Component {
     var _this$props$onStop, _this$props3;
 
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
+
+    if (this.props.next) {
+      var _Typo$typos$get, _Typo$typos$get2;
+
+      (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.init();
+      (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.play();
+    }
   }
 
   render() {
@@ -226,6 +250,7 @@ class Typo extends Component {
   }
 
 }
+Typo.typos = new Map();
 
 export { Text, Typo };
 //# sourceMappingURL=index.modern.js.map

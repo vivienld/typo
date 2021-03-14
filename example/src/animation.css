@@ -2,11 +2,6 @@
   --axis-y: -1rem;
 }
 
-@keyframes wave {
- 0%, 100% {
-  transform: translatey(0); 
- }
- 33%,66% {
-  transform: translatey(var(--axis-y));
- }
-}
+@keyframes wave {0%, 100% {transform: translatey(0)}50% {transform: translatey(var(--axis-y))}}
+
+@keyframes swirl-in-fwd{0%{transform:rotate(-540deg) scale(0);opacity:0}100%{transform:rotate(0) scale(1);opacity:1}}

@@ -163,6 +163,17 @@ Those props will be used by every `Text` child that don't define them.
   </tr>
   </thead>
   <tbody>
+  <tr>
+      <td>name?</td>
+      <td>string</td>
+      <td>The name of the typo. Used by the `next` props to order the rendering of Typos</td>
+      <td>Math.random().toString(36).substr(2, 9)</td>
+    </tr>
+    <td>next?</td>
+      <td>string</td>
+      <td>The name of the next typo to render</td>
+      <td>undefined</td>
+    </tr>
     <tr>
       <td>pace?</td>
       <td>number</td>

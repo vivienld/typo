@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Text from './text';
 interface Props {
+    /** Defines this typo as being the first to execute when this typo's name is in the 'next' prop of another typo */
+    first?: boolean;
     /** Prints the chars in the Texts backwards */
     rewind?: boolean;
     /** Displays all the chars in the Texts at once */
@@ -11,6 +13,10 @@ interface Props {
     pace?: number;
     /** The pace of white spaces to make the text more dynamic */
     whiteSpacePace?: number;
+    /** The name of the next Typo to render */
+    next?: string;
+    /** the name of the typo */
+    name?: string;
     /**
      * Called when the component is mounted
      * @param typo The current Typo component
@@ -38,11 +44,16 @@ interface State {
     display: JSX.Element[] | JSX.Element;
 }
 export default class Typo extends Component<Props, State> {
+    static typos: Map<string, Typo>;
+    static first: Typo;
+    private initiated;
+    name: string;
     texts: JSX.Element[];
     textRefs: React.RefObject<Text>[];
     iteration: number;
     constructor(props: Props);
     componentDidMount(): void;
+    init(): void;
     play(): void;
     stop(): void;
     onStart(): void;

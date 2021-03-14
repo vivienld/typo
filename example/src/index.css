@@ -1,21 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Fascinate&display=swap');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Roboto,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+.wave {animation:wave .5s ease-in-out 1;}
+.swirl-in-fwd{animation:swirl-in-fwd .25s ease-out both}
+
+.wave-infinite{animation:wave 1.5s ease-in-out infinite}
+
+.header{
+  text-align:center;
+  padding:1rem;
+  background-color: rgb(38, 0, 255);
+  color: white;
 }
 
-.wave {
-  animation: wave .25s ease-in-out 1;
+.reactypo-title{
+  font-family: Fascinate, sans-serif;
+  font-size:2rem;
 }
 
-.container{
+.reactypo-subtitle{
+  font-size:1.5rem;
 }
