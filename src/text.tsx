@@ -80,17 +80,17 @@ export default class Text extends Component<Props, State> {
             if (!this.initiated) {
                 this.onStart();
                 this.initiated = true;
-                pace = this.props.parent?.props.pause || this.props.pause || defaultPause;
+                pace = this.props.pause || this.props.parent?.props.pause || defaultPause;
             } else if (this.str[this.iteration] != '\xa0') {
-                pace = this.props.parent?.props.pace || this.props.pace || defaultPace;
+                pace = this.props.pace || this.props.parent?.props.pace || defaultPace;
             } else {
-                pace = (this.props.parent?.props.whiteSpacePace || this.props.whiteSpacePace || defaultPace);
+                pace = (this.props.whiteSpacePace || this.props.parent?.props.whiteSpacePace || defaultPace);
             }
 
             setTimeout(() => {
 
-                const stamp = this.props.parent?.props.stamp || this.props.stamp;
-                const rewind = this.props.parent?.props.rewind || this.props.rewind;
+                const stamp = this.props.stamp || this.props.parent?.props.stamp;
+                const rewind = this.props.rewind || this.props.parent?.props.rewind;
             
                 if (!stamp) {
                     const chars = this.str.substr(0, this.iteration + 1).split('');

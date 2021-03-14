@@ -4,9 +4,9 @@ import { Text, Typo } from 'reactypo'
 
 const App = () => {
   return (
-    <Typo>
-      <Text charClassName="wave">Hello </Text>
-      <Text charClassName="wave">World!</Text>
+    <Typo pace={5000}>
+      <Text pace={50} charClassName="wave">Hello </Text>
+      <Text pause={500} pace={2000} charClassName="wave">World!</Text>
     </Typo>
   )
 }

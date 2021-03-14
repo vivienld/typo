@@ -68,22 +68,22 @@ var Text = /*#__PURE__*/function (_Component) {
 
         this.onStart();
         this.initiated = true;
-        pace = ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || this.props.pause || defaultPause;
+        pace = this.props.pause || ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || defaultPause;
       } else if (this.str[this.iteration] != '\xa0') {
         var _this$props$parent2;
 
-        pace = ((_this$props$parent2 = this.props.parent) === null || _this$props$parent2 === void 0 ? void 0 : _this$props$parent2.props.pace) || this.props.pace || defaultPace;
+        pace = this.props.pace || ((_this$props$parent2 = this.props.parent) === null || _this$props$parent2 === void 0 ? void 0 : _this$props$parent2.props.pace) || defaultPace;
       } else {
         var _this$props$parent3;
 
-        pace = ((_this$props$parent3 = this.props.parent) === null || _this$props$parent3 === void 0 ? void 0 : _this$props$parent3.props.whiteSpacePace) || this.props.whiteSpacePace || defaultPace;
+        pace = this.props.whiteSpacePace || ((_this$props$parent3 = this.props.parent) === null || _this$props$parent3 === void 0 ? void 0 : _this$props$parent3.props.whiteSpacePace) || defaultPace;
       }
 
       setTimeout(function () {
         var _this2$props$parent, _this2$props$parent2;
 
-        var stamp = ((_this2$props$parent = _this2.props.parent) === null || _this2$props$parent === void 0 ? void 0 : _this2$props$parent.props.stamp) || _this2.props.stamp;
-        var rewind = ((_this2$props$parent2 = _this2.props.parent) === null || _this2$props$parent2 === void 0 ? void 0 : _this2$props$parent2.props.rewind) || _this2.props.rewind;
+        var stamp = _this2.props.stamp || ((_this2$props$parent = _this2.props.parent) === null || _this2$props$parent === void 0 ? void 0 : _this2$props$parent.props.stamp);
+        var rewind = _this2.props.rewind || ((_this2$props$parent2 = _this2.props.parent) === null || _this2$props$parent2 === void 0 ? void 0 : _this2$props$parent2.props.rewind);
 
         if (!stamp) {
           var chars = _this2.str.substr(0, _this2.iteration + 1).split('');
