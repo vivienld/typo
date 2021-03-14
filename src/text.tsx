@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Typo from './typo';
 
 const defaultPace = 40;
-const defaultDelay = 0;
+const defaultpause = 0;
 
 const spanStyle = {
     display: 'inline-block'
@@ -10,7 +10,7 @@ const spanStyle = {
 
 interface Props {
     pace?: number;
-    delay?: number;
+    pause?: number;
     block?: boolean;
     stamp?: boolean;
     rewind?: boolean;
@@ -36,11 +36,10 @@ export default class Text extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.str = (this.props.children as string || '').replaceAll(' ', '\xa0');
+        this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
     }
 
     componentDidMount() {
-        this.iteration = !this.props.rewind ? 0 : (this.props.children as string || '').length - 1;
-
         if (!this.props.parent) {
             this.run();
         }
@@ -48,11 +47,10 @@ export default class Text extends Component<Props, State> {
 
 
     run() {
-
         if (!this.initiated) {
             this.onStart();
             this.initiated = true;
-            setTimeout(() => { this.play(); this.run(); }, this.props.delay || defaultDelay);
+            this.interval = setTimeout(() => { this.play(); this.run(); }, this.props.pause || defaultpause);
         } else {
             this.interval = setInterval((() => this.play()), this.props.pace || defaultPace)
         }

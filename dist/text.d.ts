@@ -3,7 +3,7 @@ import { Component } from 'react';
 import Typo from './typo';
 interface Props {
     pace?: number;
-    delay?: number;
+    pause?: number;
     block?: boolean;
     stamp?: boolean;
     rewind?: boolean;

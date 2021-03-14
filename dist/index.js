@@ -28,7 +28,7 @@ function _assertThisInitialized(self) {
 }
 
 var defaultPace = 40;
-var defaultDelay = 0;
+var defaultpause = 0;
 var spanStyle = {
   display: 'inline-block'
 };
@@ -41,14 +41,13 @@ var Text = /*#__PURE__*/function (_Component) {
 
     _this = _Component.call(this, props) || this;
     _this.str = (_this.props.children || '').replaceAll(' ', '\xa0');
+    _this.iteration = !_this.props.rewind ? 0 : _this.str.length - 1;
     return _this;
   }
 
   var _proto = Text.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
-
     if (!this.props.parent) {
       this.run();
     }
@@ -60,11 +59,11 @@ var Text = /*#__PURE__*/function (_Component) {
     if (!this.initiated) {
       this.onStart();
       this.initiated = true;
-      setTimeout(function () {
+      this.interval = setTimeout(function () {
         _this2.play();
 
         _this2.run();
-      }, this.props.delay || defaultDelay);
+      }, this.props.pause || defaultpause);
     } else {
       this.interval = setInterval(function () {
         return _this2.play();
@@ -180,11 +179,12 @@ var Typo = /*#__PURE__*/function (_Component) {
 
       _this.textRefs.push(ref);
 
+      console.log(child);
       return React__default.createElement(Text, Object.assign({}, child.props, {
         ref: ref,
         parent: _assertThisInitialized(_this),
         rewind: _this.props.rewind
-      }), child.props.children);
+      }), child.props.children || '');
     });
     return _this;
   }

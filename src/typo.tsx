@@ -25,8 +25,8 @@ export default class Typo extends Component<Props, State> {
         this.texts = React.Children.map(this.props.children as JSX.Element, child => {
             let ref = React.createRef<Text>();
             this.textRefs.push(ref);
-
-            return <Text {...child.props} ref={ref} parent={this} rewind={this.props.rewind}>{child.props.children}</Text>
+            console.log(child)
+            return <Text {...child.props} ref={ref} parent={this} rewind={this.props.rewind}>{child.props.children || ''}</Text>
         })
 
     }
@@ -50,9 +50,9 @@ export default class Typo extends Component<Props, State> {
                     this.textRefs[i].current?.show();
                 }
             }
-
+            
             this.textRefs[this.iteration].current?.run();
-
+            
             this.iteration += this.props.rewind ? -1 : 1;
             this.onPlay();
         }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 const defaultPace = 40;
-const defaultDelay = 0;
+const defaultpause = 0;
 const spanStyle = {
   display: 'inline-block'
 };
@@ -9,11 +9,10 @@ class Text extends Component {
   constructor(props) {
     super(props);
     this.str = (this.props.children || '').replaceAll(' ', '\xa0');
+    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
   }
 
   componentDidMount() {
-    this.iteration = !this.props.rewind ? 0 : (this.props.children || '').length - 1;
-
     if (!this.props.parent) {
       this.run();
     }
@@ -23,10 +22,10 @@ class Text extends Component {
     if (!this.initiated) {
       this.onStart();
       this.initiated = true;
-      setTimeout(() => {
+      this.interval = setTimeout(() => {
         this.play();
         this.run();
-      }, this.props.delay || defaultDelay);
+      }, this.props.pause || defaultpause);
     } else {
       this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
     }
@@ -127,11 +126,12 @@ class Typo extends Component {
     this.texts = React.Children.map(this.props.children, child => {
       let ref = React.createRef();
       this.textRefs.push(ref);
+      console.log(child);
       return React.createElement(Text, Object.assign({}, child.props, {
         ref: ref,
         parent: this,
         rewind: this.props.rewind
-      }), child.props.children);
+      }), child.props.children || '');
     });
   }
 

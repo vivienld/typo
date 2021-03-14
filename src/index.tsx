@@ -3,5 +3,5 @@ import Typo from './typo'
 
 export {
   Text,
-  Typo,
+  Typo
 }
