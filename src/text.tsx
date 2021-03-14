@@ -72,7 +72,7 @@ export default class Text extends Component<Props, State> {
                     return <span style={spanStyle} key={i}>{char}</span>
                 });
                 display.pop();
-                display.push(<span style={spanStyle} className={this.props.charClassName}>{chars.slice(-1)}</span>)
+                display.push(<span style={spanStyle} className={this.props.charClassName} key={Date.now()}>{chars.slice(-1)}</span>)
             } else {
                 display = chars.map((char, i) => {
                     return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
@@ -118,6 +118,7 @@ export default class Text extends Component<Props, State> {
 
     onPlay() {
         this.props.onPlay?.(this);
+        this.props.parent?.props.onChar?.(this.str[this.iteration + 1], this.props.parent);
     }
 
     onStop() {

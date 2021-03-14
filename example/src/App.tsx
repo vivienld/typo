@@ -9,6 +9,7 @@ const App = () => {
       onStart={(typo) => console.log(typo + ' typo start')}
       onPlay={(typo) => console.log(typo + ' typo play')}
       onStop={(typo) => console.log(typo + ' typo stop')}
+      onChar={(char, typo) => console.log(typo + ' typo char ' + char)}
     >
       <Text
         charClassName={'rotate-in-center'} className={'container'}

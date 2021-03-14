@@ -98,7 +98,8 @@ var Text = /*#__PURE__*/function (_Component) {
         display.pop();
         display.push(React__default.createElement("span", {
           style: spanStyle,
-          className: this.props.charClassName
+          className: this.props.charClassName,
+          key: Date.now()
         }, chars.slice(-1)));
       } else {
         display = chars.map(function (_char2, i) {
@@ -160,9 +161,10 @@ var Text = /*#__PURE__*/function (_Component) {
   };
 
   _proto.onPlay = function onPlay() {
-    var _this$props$onPlay, _this$props2;
+    var _this$props$onPlay, _this$props2, _this$props$parent5, _this$props$parent5$p, _this$props$parent5$p2;
 
     (_this$props$onPlay = (_this$props2 = this.props).onPlay) === null || _this$props$onPlay === void 0 ? void 0 : _this$props$onPlay.call(_this$props2, this);
+    (_this$props$parent5 = this.props.parent) === null || _this$props$parent5 === void 0 ? void 0 : (_this$props$parent5$p = (_this$props$parent5$p2 = _this$props$parent5.props).onChar) === null || _this$props$parent5$p === void 0 ? void 0 : _this$props$parent5$p.call(_this$props$parent5$p2, this.str[this.iteration + 1], this.props.parent);
   };
 
   _proto.onStop = function onStop() {

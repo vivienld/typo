@@ -8,6 +8,7 @@ interface Props {
     onStart?: (typo: Typo) => void;
     onPlay?: (typo: Typo) => void;
     onStop?: (typo: Typo) => void;
+    onChar?: (char: string, typo: Typo) => void;
 }
 interface State {
     display: JSX.Element[] | JSX.Element;
