@@ -15,9 +15,8 @@ interface Props {
     stamp?: boolean;
     rewind?: boolean;
     parent?: Typo;
-    printClassName?: string;
     charClassName?: string;
-    textClassName?: string;
+    className?: string;
     onStart?: (text: Text) => void;
     onPlay?: (text: Text) => void;
     onStop?: (text: Text) => void;
@@ -66,9 +65,9 @@ export default class Text extends Component<Props, State> {
             this.setState({
                 display: chars.map((char, i) => {
                     if (i == chars.length - 1) {
-                        return <span style={spanStyle} className={this.props.printClassName} key={i}>{char}</span>
-                    } else {
                         return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
+                    } else {
+                        return <span style={spanStyle} key={i}>{char}</span>
                     }
                 })
             }, () => {
@@ -84,7 +83,7 @@ export default class Text extends Component<Props, State> {
             })
         } else {
             this.setState({
-                display: <span style={spanStyle} className={this.props.printClassName}>{this.str}</span>
+                display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
             }, () => {
                 this.iteration = this.props.rewind ? 0 : (this.props.children as string).length - 1;
                 this.onPlay();
@@ -95,7 +94,7 @@ export default class Text extends Component<Props, State> {
 
     show() {
         this.setState({
-            display: this.str.split('').map((char, i) => <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>)
+            display: this.str.split('').map((char, i) => <span style={spanStyle} key={i}>{char}</span>)
         })
     }
 
@@ -118,7 +117,7 @@ export default class Text extends Component<Props, State> {
     }
 
     render() {
-        return <div className={this.props.textClassName} style={{
+        return <div className={this.props.className} style={{
             display: this.props.block ? 'block' : 'inline-block'
         }}>{this.state?.display}</div>
     }

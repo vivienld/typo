@@ -40,13 +40,12 @@ class Text extends Component {
           if (i == chars.length - 1) {
             return React.createElement("span", {
               style: spanStyle,
-              className: this.props.printClassName,
+              className: this.props.charClassName,
               key: i
             }, char);
           } else {
             return React.createElement("span", {
               style: spanStyle,
-              className: this.props.charClassName,
               key: i
             }, char);
           }
@@ -64,7 +63,7 @@ class Text extends Component {
       this.setState({
         display: React.createElement("span", {
           style: spanStyle,
-          className: this.props.printClassName
+          className: this.props.charClassName
         }, this.str)
       }, () => {
         this.iteration = this.props.rewind ? 0 : this.props.children.length - 1;
@@ -78,7 +77,6 @@ class Text extends Component {
     this.setState({
       display: this.str.split('').map((char, i) => React.createElement("span", {
         style: spanStyle,
-        className: this.props.charClassName,
         key: i
       }, char))
     });
@@ -112,7 +110,7 @@ class Text extends Component {
     var _this$state;
 
     return React.createElement("div", {
-      className: this.props.textClassName,
+      className: this.props.className,
       style: {
         display: this.props.block ? 'block' : 'inline-block'
       }

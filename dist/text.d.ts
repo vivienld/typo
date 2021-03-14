@@ -8,9 +8,8 @@ interface Props {
     stamp?: boolean;
     rewind?: boolean;
     parent?: Typo;
-    printClassName?: string;
     charClassName?: string;
-    textClassName?: string;
+    className?: string;
     onStart?: (text: Text) => void;
     onPlay?: (text: Text) => void;
     onStop?: (text: Text) => void;

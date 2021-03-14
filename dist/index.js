@@ -82,13 +82,12 @@ var Text = /*#__PURE__*/function (_Component) {
           if (i == chars.length - 1) {
             return React__default.createElement("span", {
               style: spanStyle,
-              className: _this3.props.printClassName,
+              className: _this3.props.charClassName,
               key: i
             }, _char);
           } else {
             return React__default.createElement("span", {
               style: spanStyle,
-              className: _this3.props.charClassName,
               key: i
             }, _char);
           }
@@ -106,7 +105,7 @@ var Text = /*#__PURE__*/function (_Component) {
       this.setState({
         display: React__default.createElement("span", {
           style: spanStyle,
-          className: this.props.printClassName
+          className: this.props.charClassName
         }, this.str)
       }, function () {
         _this3.iteration = _this3.props.rewind ? 0 : _this3.props.children.length - 1;
@@ -119,13 +118,10 @@ var Text = /*#__PURE__*/function (_Component) {
   };
 
   _proto.show = function show() {
-    var _this4 = this;
-
     this.setState({
       display: this.str.split('').map(function (_char2, i) {
         return React__default.createElement("span", {
           style: spanStyle,
-          className: _this4.props.charClassName,
           key: i
         }, _char2);
       })
@@ -160,7 +156,7 @@ var Text = /*#__PURE__*/function (_Component) {
     var _this$state;
 
     return React__default.createElement("div", {
-      className: this.props.textClassName,
+      className: this.props.className,
       style: {
         display: this.props.block ? 'block' : 'inline-block'
       }
