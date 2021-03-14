@@ -8,7 +8,7 @@ interface Props {
     whiteSpacePace?: number;
     /** The pause before starting the text in milliseconds. Default is 0 */
     pause?: number;
-    /** Defines if the container css display rule is 'block'. Default is 'inline-block' */
+    /** Defines if the container css display rule is 'block' or 'inline-block'. Default is false */
     block?: boolean;
     /** Displays all the chars at once */
     stamp?: boolean;
@@ -16,12 +16,12 @@ interface Props {
     rewind?: boolean;
     /** The Typo controller. Is automatically defined when a Text is in a Typo */
     parent?: Typo;
-    /** The className of the current printed char */
+    /** The className assigned to every printed char */
     charClassName?: string;
     /** The className of the Text container */
     className?: string;
     /**
-     * Called when the component is mounted
+     * Called when the first char is printed
      * @param text The current Text component
      * */
     onStart?: (text: Text) => void;

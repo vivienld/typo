@@ -21,7 +21,7 @@ interface Props {
     * @param text The current Text component
     * @param typo The current Typo component
     * */
-    onText?: (text: React.RefObject<Text>, typo: Typo) => void;
+    onText?: (text: Text, typo: Typo) => void;
     /**
      * Called when the last char in the last Text is printed
      * @param typo The current Typo component

@@ -23,7 +23,7 @@ interface Props {
     * @param text The current Text component
     * @param typo The current Typo component
     * */
-    onText?: (text: React.RefObject<Text>, typo: Typo) => void;
+    onText?: (text: Text, typo: Typo) => void;
     /**
      * Called when the last char in the last Text is printed
      * @param typo The current Typo component
@@ -94,10 +94,12 @@ export default class Typo extends Component<Props, State> {
 
     onText() {
         const text = this.props.rewind
-            ? this.textRefs[this.iteration + 1]
-            : this.textRefs[this.iteration - 1];
+            ? this.textRefs[this.iteration + 1].current
+            : this.textRefs[this.iteration - 1].current;
 
-        this.props.onText?.(text, this);
+        if (text) {
+            this.props.onText?.(text, this);
+        }
     }
 
     onStop() {

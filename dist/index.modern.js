@@ -206,10 +206,13 @@ class Typo extends Component {
   }
 
   onText() {
-    var _this$props$onText, _this$props2;
+    const text = this.props.rewind ? this.textRefs[this.iteration + 1].current : this.textRefs[this.iteration - 1].current;
 
-    const text = this.props.rewind ? this.textRefs[this.iteration + 1] : this.textRefs[this.iteration - 1];
-    (_this$props$onText = (_this$props2 = this.props).onText) === null || _this$props$onText === void 0 ? void 0 : _this$props$onText.call(_this$props2, text, this);
+    if (text) {
+      var _this$props$onText, _this$props2;
+
+      (_this$props$onText = (_this$props2 = this.props).onText) === null || _this$props$onText === void 0 ? void 0 : _this$props$onText.call(_this$props2, text, this);
+    }
   }
 
   onStop() {
