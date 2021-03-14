@@ -32,8 +32,9 @@ var Text = /*#__PURE__*/function (_Component) {
     var _this;
 
     _this = _Component.call(this, props) || this;
-    _this.str = (_this.props.children || '').replaceAll(' ', '\xa0');
-    _this.iteration = !_this.props.rewind ? 0 : _this.str.length - 1;
+
+    _this.init();
+
     return _this;
   }
 
@@ -45,7 +46,10 @@ var Text = /*#__PURE__*/function (_Component) {
     }
   };
 
-  _proto.reset = function reset() {
+  _proto.init = function init() {
+    console.log('text init!');
+    this.str = (this.props.children || '').replaceAll(' ', '\xa0');
+    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
     this.stopped = false;
   };
 
@@ -225,7 +229,6 @@ var Typo = /*#__PURE__*/function (_Component) {
 
       _this3.textRefs.push(ref);
 
-      console.log(child);
       return React__default.createElement(Text, Object.assign({}, child.props, {
         ref: ref,
         parent: _this3,
@@ -294,10 +297,15 @@ var Typo = /*#__PURE__*/function (_Component) {
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
 
     if (this.props.next) {
-      var _Typo$typos$get, _Typo$typos$get2;
+      var _Typo$typos$get, _Typo$typos$get2, _Typo$typos$get3;
 
-      (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.init();
-      (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.play();
+      (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.textRefs.forEach(function (ref) {
+        var _ref$current;
+
+        return (_ref$current = ref.current) === null || _ref$current === void 0 ? void 0 : _ref$current.init();
+      });
+      (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.init();
+      (_Typo$typos$get3 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get3 === void 0 ? void 0 : _Typo$typos$get3.play();
     }
   };
 

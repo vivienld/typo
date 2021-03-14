@@ -77,7 +77,7 @@ export default class Typo extends Component<Props, State> {
         this.texts = React.Children.map(this.props.children as JSX.Element, child => {
             let ref = React.createRef<Text>();
             this.textRefs.push(ref);
-            console.log(child)
+
             return <Text {...child.props} ref={ref} parent={this} rewind={this.props.rewind}>{child.props.children || ''}</Text>
         })
         
@@ -137,6 +137,7 @@ export default class Typo extends Component<Props, State> {
     onStop() {
         this.props.onStop?.(this);
         if (this.props.next) {
+            Typo.typos.get(this.props.next)?.textRefs.forEach(ref => ref.current?.init());
             Typo.typos.get(this.props.next)?.init();
             Typo.typos.get(this.props.next)?.play();
         }

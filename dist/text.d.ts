@@ -48,7 +48,7 @@ export default class Text extends Component<Props, State> {
     iteration: number;
     constructor(props: Props);
     componentDidMount(): void;
-    reset(): void;
+    init(): void;
     play(): void;
     show(): void;
     stop(): void;

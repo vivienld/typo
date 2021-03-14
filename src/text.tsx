@@ -60,17 +60,19 @@ export default class Text extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.str = (this.props.children as string || '').replaceAll(' ', '\xa0');
-        this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
+        this.init();
     }
-
+    
     componentDidMount() {
         if (!this.props.parent) {
             this.play();
         }
     }
-
-    reset() {
+    
+    init() {
+        console.log('text init!')
+        this.str = (this.props.children as string || '').replaceAll(' ', '\xa0');
+        this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
         this.stopped = false;
     }
 
