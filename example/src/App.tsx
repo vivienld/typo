@@ -5,8 +5,8 @@ import { Text, Typo } from 'typo'
 const App = () => {
   return (
     <Typo>
-      <Text>Hello </Text>
-      <Text>World!</Text>
+      <Text charClassName="wave">Hello </Text>
+      <Text charClassName="wave">World!</Text>
     </Typo>
   )
 }
