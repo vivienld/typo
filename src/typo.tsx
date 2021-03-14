@@ -3,6 +3,9 @@ import Text from './text';
 
 interface Props {
     rewind?: boolean;
+    stamp?: boolean;
+    pause?: number;
+    pace?: number;
     onStart?: (typo: Typo) => void;
     onPlay?: (typo: Typo) => void;
     onStop?: (typo: Typo) => void;

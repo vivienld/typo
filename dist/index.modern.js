@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 const defaultPace = 40;
-const defaultpause = 0;
+const defaultPause = 0;
 const spanStyle = {
   display: 'inline-block'
 };
@@ -19,40 +19,61 @@ class Text extends Component {
   }
 
   run() {
+    var _this$props$parent, _this$props$parent2;
+
+    const pause = ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || this.props.pause || defaultPause;
+    const pace = ((_this$props$parent2 = this.props.parent) === null || _this$props$parent2 === void 0 ? void 0 : _this$props$parent2.props.pace) || this.props.pace || defaultPace;
+
     if (!this.initiated) {
       this.onStart();
       this.initiated = true;
       this.interval = setTimeout(() => {
         this.play();
         this.run();
-      }, this.props.pause || defaultpause);
+      }, pause);
     } else {
-      this.interval = setInterval(() => this.play(), this.props.pace || defaultPace);
+      this.interval = setInterval(() => this.play(), pace);
     }
   }
 
   play() {
-    if (!this.props.stamp) {
-      const chars = this.str.substr(0, this.iteration + 1).split('');
-      this.setState({
-        display: chars.map((char, i) => {
-          if (i == chars.length - 1) {
-            return React.createElement("span", {
-              style: spanStyle,
-              className: this.props.charClassName,
-              key: i
-            }, char);
-          } else {
-            return React.createElement("span", {
-              style: spanStyle,
-              key: i
-            }, char);
-          }
-        })
-      }, () => {
-        this.iteration += this.props.rewind ? -1 : 1;
+    var _this$props$parent3, _this$props$parent4;
 
-        if (this.props.rewind && this.iteration < -1 || !this.props.rewind && this.iteration > this.str.length) {
+    const stamp = ((_this$props$parent3 = this.props.parent) === null || _this$props$parent3 === void 0 ? void 0 : _this$props$parent3.props.stamp) || this.props.stamp;
+    const rewind = ((_this$props$parent4 = this.props.parent) === null || _this$props$parent4 === void 0 ? void 0 : _this$props$parent4.props.rewind) || this.props.rewind;
+
+    if (!stamp) {
+      const chars = this.str.substr(0, this.iteration + 1).split('');
+      let display;
+
+      if (rewind) {
+        display = chars.map((char, i) => {
+          return React.createElement("span", {
+            style: spanStyle,
+            key: i
+          }, char);
+        });
+        display.pop();
+        display.push(React.createElement("span", {
+          style: spanStyle,
+          className: this.props.charClassName
+        }, chars.slice(-1)));
+      } else {
+        display = chars.map((char, i) => {
+          return React.createElement("span", {
+            style: spanStyle,
+            className: this.props.charClassName,
+            key: i
+          }, char);
+        });
+      }
+
+      this.setState({
+        display
+      }, () => {
+        this.iteration += rewind ? -1 : 1;
+
+        if (rewind && this.iteration < -1 || !rewind && this.iteration > this.str.length) {
           this.stop();
         } else {
           this.onPlay();
@@ -65,7 +86,7 @@ class Text extends Component {
           className: this.props.charClassName
         }, this.str)
       }, () => {
-        this.iteration = this.props.rewind ? 0 : this.props.children.length - 1;
+        this.iteration = rewind ? 0 : this.props.children.length - 1;
         this.onPlay();
         this.stop();
       });

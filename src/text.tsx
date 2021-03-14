@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Typo from './typo';
 
 const defaultPace = 40;
-const defaultpause = 0;
+const defaultPause = 0;
 
 const spanStyle = {
     display: 'inline-block'
@@ -47,32 +47,43 @@ export default class Text extends Component<Props, State> {
 
 
     run() {
+        const pause = this.props.parent?.props.pause || this.props.pause || defaultPause;
+        const pace = this.props.parent?.props.pace || this.props.pace || defaultPace;
+
         if (!this.initiated) {
             this.onStart();
             this.initiated = true;
-            this.interval = setTimeout(() => { this.play(); this.run(); }, this.props.pause || defaultpause);
+            this.interval = setTimeout(() => { this.play(); this.run(); }, pause);
         } else {
-            this.interval = setInterval((() => this.play()), this.props.pace || defaultPace)
+            this.interval = setInterval((() => this.play()), pace)
         }
     }
 
     play() {
+        const stamp = this.props.parent?.props.stamp || this.props.stamp;
+        const rewind = this.props.parent?.props.rewind || this.props.rewind;
 
-        if (!this.props.stamp) {
+        if (!stamp) {
             const chars = this.str.substr(0, this.iteration + 1).split('');
-            this.setState({
-                display: chars.map((char, i) => {
-                    if (i == chars.length - 1) {
-                        return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
-                    } else {
-                        return <span style={spanStyle} key={i}>{char}</span>
-                    }
-                })
-            }, () => {
-                this.iteration += this.props.rewind ? -1 : 1;
+            let display;
+
+            if (rewind) {
+                display = chars.map((char, i) => {
+                    return <span style={spanStyle} key={i}>{char}</span>
+                });
+                display.pop();
+                display.push(<span style={spanStyle} className={this.props.charClassName}>{chars.slice(-1)}</span>)
+            } else {
+                display = chars.map((char, i) => {
+                    return <span style={spanStyle} className={this.props.charClassName} key={i}>{char}</span>
+                });
+            }
+            this.setState({ display }, () => {
+
+                this.iteration += rewind ? -1 : 1;
                 if (
-                    (this.props.rewind && this.iteration < -1) ||
-                    (!this.props.rewind && this.iteration > this.str.length)
+                    (rewind && this.iteration < -1) ||
+                    (!rewind && this.iteration > this.str.length)
                 ) {
                     this.stop();
                 } else {
@@ -83,7 +94,7 @@ export default class Text extends Component<Props, State> {
             this.setState({
                 display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
             }, () => {
-                this.iteration = this.props.rewind ? 0 : (this.props.children as string).length - 1;
+                this.iteration = rewind ? 0 : (this.props.children as string).length - 1;
                 this.onPlay();
                 this.stop();
             })

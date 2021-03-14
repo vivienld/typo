@@ -14,7 +14,7 @@ code {
 }
 
 .rotate-in-center {
-	        animation: rotate-in-center .3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: rotate-in-center 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   color:blue;
 }
 

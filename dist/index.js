@@ -28,7 +28,7 @@ function _assertThisInitialized(self) {
 }
 
 var defaultPace = 40;
-var defaultpause = 0;
+var defaultPause = 0;
 var spanStyle = {
   display: 'inline-block'
 };
@@ -54,7 +54,12 @@ var Text = /*#__PURE__*/function (_Component) {
   };
 
   _proto.run = function run() {
-    var _this2 = this;
+    var _this$props$parent,
+        _this$props$parent2,
+        _this2 = this;
+
+    var pause = ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || this.props.pause || defaultPause;
+    var pace = ((_this$props$parent2 = this.props.parent) === null || _this$props$parent2 === void 0 ? void 0 : _this$props$parent2.props.pace) || this.props.pace || defaultPace;
 
     if (!this.initiated) {
       this.onStart();
@@ -63,38 +68,54 @@ var Text = /*#__PURE__*/function (_Component) {
         _this2.play();
 
         _this2.run();
-      }, this.props.pause || defaultpause);
+      }, pause);
     } else {
       this.interval = setInterval(function () {
         return _this2.play();
-      }, this.props.pace || defaultPace);
+      }, pace);
     }
   };
 
   _proto.play = function play() {
-    var _this3 = this;
+    var _this$props$parent3,
+        _this$props$parent4,
+        _this3 = this;
 
-    if (!this.props.stamp) {
+    var stamp = ((_this$props$parent3 = this.props.parent) === null || _this$props$parent3 === void 0 ? void 0 : _this$props$parent3.props.stamp) || this.props.stamp;
+    var rewind = ((_this$props$parent4 = this.props.parent) === null || _this$props$parent4 === void 0 ? void 0 : _this$props$parent4.props.rewind) || this.props.rewind;
+
+    if (!stamp) {
       var chars = this.str.substr(0, this.iteration + 1).split('');
-      this.setState({
-        display: chars.map(function (_char, i) {
-          if (i == chars.length - 1) {
-            return React__default.createElement("span", {
-              style: spanStyle,
-              className: _this3.props.charClassName,
-              key: i
-            }, _char);
-          } else {
-            return React__default.createElement("span", {
-              style: spanStyle,
-              key: i
-            }, _char);
-          }
-        })
-      }, function () {
-        _this3.iteration += _this3.props.rewind ? -1 : 1;
+      var display;
 
-        if (_this3.props.rewind && _this3.iteration < -1 || !_this3.props.rewind && _this3.iteration > _this3.str.length) {
+      if (rewind) {
+        display = chars.map(function (_char, i) {
+          return React__default.createElement("span", {
+            style: spanStyle,
+            key: i
+          }, _char);
+        });
+        display.pop();
+        display.push(React__default.createElement("span", {
+          style: spanStyle,
+          className: this.props.charClassName
+        }, chars.slice(-1)));
+      } else {
+        display = chars.map(function (_char2, i) {
+          return React__default.createElement("span", {
+            style: spanStyle,
+            className: _this3.props.charClassName,
+            key: i
+          }, _char2);
+        });
+      }
+
+      this.setState({
+        display: display
+      }, function () {
+        _this3.iteration += rewind ? -1 : 1;
+
+        if (rewind && _this3.iteration < -1 || !rewind && _this3.iteration > _this3.str.length) {
           _this3.stop();
         } else {
           _this3.onPlay();
@@ -107,7 +128,7 @@ var Text = /*#__PURE__*/function (_Component) {
           className: this.props.charClassName
         }, this.str)
       }, function () {
-        _this3.iteration = _this3.props.rewind ? 0 : _this3.props.children.length - 1;
+        _this3.iteration = rewind ? 0 : _this3.props.children.length - 1;
 
         _this3.onPlay();
 
@@ -118,11 +139,11 @@ var Text = /*#__PURE__*/function (_Component) {
 
   _proto.show = function show() {
     this.setState({
-      display: this.str.split('').map(function (_char2, i) {
+      display: this.str.split('').map(function (_char3, i) {
         return React__default.createElement("span", {
           style: spanStyle,
           key: i
-        }, _char2);
+        }, _char3);
       })
     });
   };
