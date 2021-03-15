@@ -50,6 +50,7 @@ export default class Text extends Component<Props, State> {
     componentDidMount(): void;
     init(): void;
     play(): void;
+    replay(): void;
     show(): void;
     stop(): void;
     onStart(): void;

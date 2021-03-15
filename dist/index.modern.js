@@ -30,6 +30,7 @@ class Text extends Component {
       if (!this.initiated) {
         var _this$props$parent;
 
+        this.init();
         this.onStart();
         this.initiated = true;
         pace = this.props.pause || ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || defaultPause;
@@ -105,6 +106,11 @@ class Text extends Component {
     }
   }
 
+  replay() {
+    this.init();
+    this.play();
+  }
+
   show() {
     this.setState({
       display: this.str.split('').map((char, i) => React.createElement("span", {
@@ -161,14 +167,34 @@ class Typo extends Component {
     this.init();
   }
 
+  static play(typoName) {
+    var _Typo$typos$get;
+
+    (_Typo$typos$get = Typo.typos.get(typoName)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.replay();
+  }
+
+  static stop(typoName) {
+    var _Typo$typos$get2;
+
+    (_Typo$typos$get2 = Typo.typos.get(typoName)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.stop();
+  }
+
   componentDidMount() {
-    if (!Array.from(Typo.typos.values()).some(typo => typo.props.next == this.name) || Typo.first == this) {
-      this.play();
+    if (!this.props.stop) {
+      if (!Array.from(Typo.typos.values()).some(typo => typo.props.next == this.name) || Typo.first == this) {
+        this.init();
+        this.play();
+      }
     }
   }
 
   init() {
     this.initiated = false;
+    this.textRefs.forEach(text => {
+      var _text$current;
+
+      return (_text$current = text.current) === null || _text$current === void 0 ? void 0 : _text$current.init();
+    });
     this.texts = React.Children.map(this.props.children, child => {
       let ref = React.createRef();
       this.textRefs.push(ref);
@@ -189,8 +215,8 @@ class Typo extends Component {
 
   play() {
     if (!this.initiated) {
-      this.initiated = true;
       this.onStart();
+      this.initiated = true;
     }
 
     if (this.props.rewind && this.iteration < 0 || !this.props.rewind && this.iteration > this.texts.length - 1) {
@@ -210,6 +236,11 @@ class Typo extends Component {
       this.iteration += this.props.rewind ? -1 : 1;
       this.onText();
     }
+  }
+
+  replay() {
+    this.init();
+    this.play();
   }
 
   stop() {
@@ -240,15 +271,14 @@ class Typo extends Component {
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
 
     if (this.props.next) {
-      var _Typo$typos$get, _Typo$typos$get2, _Typo$typos$get3;
+      var _Typo$typos$get3, _Typo$typos$get4;
 
-      (_Typo$typos$get = Typo.typos.get(this.props.next)) === null || _Typo$typos$get === void 0 ? void 0 : _Typo$typos$get.textRefs.forEach(ref => {
+      (_Typo$typos$get3 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get3 === void 0 ? void 0 : _Typo$typos$get3.textRefs.forEach(ref => {
         var _ref$current;
 
         return (_ref$current = ref.current) === null || _ref$current === void 0 ? void 0 : _ref$current.init();
       });
-      (_Typo$typos$get2 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get2 === void 0 ? void 0 : _Typo$typos$get2.init();
-      (_Typo$typos$get3 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get3 === void 0 ? void 0 : _Typo$typos$get3.play();
+      (_Typo$typos$get4 = Typo.typos.get(this.props.next)) === null || _Typo$typos$get4 === void 0 ? void 0 : _Typo$typos$get4.play();
     }
   }
 

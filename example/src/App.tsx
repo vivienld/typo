@@ -11,12 +11,11 @@ const App = () => {
         <Text pause={200} charClassName="wave-infinite" className="title title2" stamp>Reactypo</Text>
         <Text pause={500} whiteSpacePace={100} charClassName=" sub-title-char" className={'sub-title'}>animate and control text with react</Text>
       </Typo>
-      
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Typo className="under-contruction" name="under-contruction">
-          <Text pause={200} charClassName="swirl-in-fwd" >This documentation is under construction</Text>
-          </Typo>
+
+      <div className="under-contruction">
+        <div>This documentation is under construction</div>
       </div>
+      <input type="button" className="bottom" onClick={() => Typo.replay('title')} value="Replay!" />
     </main>
   )
 }

@@ -74,11 +74,12 @@ export default class Text extends Component<Props, State> {
         this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
         this.stopped = false;
     }
-
+    
     play() {
         if (!this.stopped) {
             let pace;
             if (!this.initiated) {
+                this.init();
                 this.onStart();
                 this.initiated = true;
                 pace = this.props.pause || this.props.parent?.props.pause || defaultPause;
@@ -132,6 +133,11 @@ export default class Text extends Component<Props, State> {
                 this.play();
             }, pace)
         }
+    }
+
+    replay() {
+        this.init();
+        this.play();
     }
 
     show() {

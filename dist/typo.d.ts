@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Text from './text';
 interface Props {
+    /** Prevents the typo from playing */
+    stop?: boolean;
     /** Defines this typo as being the first to execute when this typo's name is in the 'next' prop of another typo */
     first?: boolean;
     /** Prints the chars in the Texts backwards */
@@ -46,8 +48,10 @@ interface State {
     display: JSX.Element[] | JSX.Element;
 }
 export default class Typo extends Component<Props, State> {
-    static typos: Map<string, Typo>;
-    static first: Typo;
+    private static typos;
+    private static first;
+    static play(typoName: string): void;
+    static stop(typoName: string): void;
     private initiated;
     name: string;
     texts: JSX.Element[];
@@ -57,6 +61,7 @@ export default class Typo extends Component<Props, State> {
     componentDidMount(): void;
     init(): void;
     play(): void;
+    replay(): void;
     stop(): void;
     onStart(): void;
     onText(): void;

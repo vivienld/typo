@@ -167,8 +167,9 @@ Those props will be used by every `Text` child that don't define them.
       <td>name?</td>
       <td>string</td>
       <td>The name of the typo. Used by the `next` props to order the rendering of Typos</td>
-      <td>Math.random().toString(36).substr(2, 9)</td>
+      <td>random</td>
     </tr>
+    <tr>
     <td>next?</td>
       <td>string</td>
       <td>The name of the next typo to render</td>
@@ -208,6 +209,12 @@ Those props will be used by every `Text` child that don't define them.
       <td>rewind?</td>
       <td>boolean</td>
       <td>Prints the chars backwards</td>
+      <td>false</td>
+    </tr>
+     <tr>
+      <td>stop?</td>
+      <td>boolean</td>
+      <td>Prevents the Typo from playing</td>
       <td>false</td>
     </tr>
   </tbody>
@@ -264,6 +271,37 @@ Those props will be used by every `Text` child that don't define them.
       </td>
       <td>Called when the last char is printed</td>
     </tr>
+  </tbody>
+</table>
+
+### Static methods
+
+The typo class can manipulate every typo with a name
+
+<table>
+  <thead>
+  <tr>
+    <th>name</th>
+    <th>params</th>
+    <th>description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>play</td>
+      <td>
+        typoName:string The name of the Typo component to play
+      </td>
+      <td>Plays the Typo</td>
+    </tr>
+    <tr>
+      <td>stop</td>
+      <td>
+      typoName:string The name of the Typo component to stop
+      </td>
+      <td>Stops the Typo</td>
+    </tr>
+   
   </tbody>
 </table>
 
