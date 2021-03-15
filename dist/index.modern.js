@@ -59,8 +59,13 @@ class Text extends Component {
 
         if (rewind) {
           display = chars.map((char, i) => {
+            const style = {
+              display: 'inline-block',
+              animation: 'none'
+            };
             return React.createElement("span", {
-              style: spanStyle,
+              className: this.props.charClassName,
+              style: style,
               key: i
             }, char);
           });
@@ -275,7 +280,6 @@ class Typo extends Component {
   onStop() {
     var _this$props$onStop, _this$props3;
 
-    console.log('stop');
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
 
     if (this.props.next) {

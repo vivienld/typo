@@ -19,6 +19,8 @@ interface Props {
     parent?: Typo;
     /** The className assigned to every printed char */
     charClassName?: string;
+    /** The className assigned to every white space char */
+    whiteSpaceClassName?: string;
     /** The className of the Text container */
     className?: string;
     /**

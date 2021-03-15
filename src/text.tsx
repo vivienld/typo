@@ -27,6 +27,8 @@ interface Props {
     parent?: Typo;
     /** The className assigned to every printed char */
     charClassName?: string;
+    /** The className assigned to every white space char */
+    whiteSpaceClassName?: string;
     /** The className of the Text container */
     className?: string;
     /**
@@ -108,7 +110,11 @@ export default class Text extends Component<Props, State> {
 
                 if (rewind) {
                     display = chars.map((char, i) => {
-                        return <span style={spanStyle} key={i}>{char}</span>
+                        const style = {
+                            display: 'inline-block',
+                            animation: 'none'
+                        }
+                        return <span className={this.props.charClassName} style={style} key={i}>{char}</span>
                     });
                     display.pop();
                     display.push(<span style={spanStyle} className={this.props.charClassName} key={Date.now()}>{chars.slice(-1)}</span>)

@@ -93,8 +93,13 @@ var Text = /*#__PURE__*/function (_Component) {
 
         if (rewind) {
           display = chars.map(function (_char, i) {
+            var style = {
+              display: 'inline-block',
+              animation: 'none'
+            };
             return React__default.createElement("span", {
-              style: spanStyle,
+              className: _this4.props.charClassName,
+              style: style,
               key: i
             }, _char);
           });
@@ -333,7 +338,6 @@ var Typo = /*#__PURE__*/function (_Component) {
   _proto.onStop = function onStop() {
     var _this$props$onStop, _this$props3;
 
-    console.log('stop');
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
 
     if (this.props.next) {

@@ -158,7 +158,6 @@ export default class Typo extends Component<Props, State> {
 
     //on lance le event handler onStop et on lance le play du prochain Typo
     onStop() {
-        console.log('stop')
         this.props.onStop?.(this);
         if (this.props.next) {
             Typo.typos.get(this.props.next)?.play();
