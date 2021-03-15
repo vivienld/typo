@@ -41,17 +41,20 @@ var Text = /*#__PURE__*/function (_Component) {
   _proto.componentDidMount = function componentDidMount() {
     if (!this.props.parent) {
       this.init();
-      this.play();
+      this.run();
     }
   };
 
   _proto.init = function init() {
+    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
+    this.stopped = false;
+  };
+
+  _proto.run = function run() {
     var _this$props$parent,
         _this2 = this;
 
     var pause = this.props.pause || ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || defaultPause;
-    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
-    this.stopped = false;
     setTimeout(function () {
       _this2.updateInterval();
     }, pause);
@@ -113,6 +116,8 @@ var Text = /*#__PURE__*/function (_Component) {
 
           if (rewind && _this4.iteration < -1 || !rewind && _this4.iteration > _this4.str.length) {
             _this4.stop();
+
+            console.log('stop' + _this4.str);
           } else {
             _this4.onChar();
           }
@@ -137,6 +142,7 @@ var Text = /*#__PURE__*/function (_Component) {
 
   _proto.replay = function replay() {
     this.init();
+    this.run();
   };
 
   _proto.show = function show() {
@@ -154,6 +160,7 @@ var Text = /*#__PURE__*/function (_Component) {
     if (this.props.loop) {
       this.replay();
     } else {
+      this.stopped = true;
       this.onStop();
     }
   };
@@ -178,7 +185,6 @@ var Text = /*#__PURE__*/function (_Component) {
   _proto.onStop = function onStop() {
     var _this$props$onStop, _this$props3, _this$props4, _this$props4$parent;
 
-    this.stopped = true;
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
     (_this$props4 = this.props) === null || _this$props4 === void 0 ? void 0 : (_this$props4$parent = _this$props4.parent) === null || _this$props4$parent === void 0 ? void 0 : _this$props4$parent.play();
   };
@@ -286,7 +292,7 @@ var Typo = /*#__PURE__*/function (_Component) {
         }
       }
 
-      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.play();
+      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.run();
       this.iteration += this.props.rewind ? -1 : 1;
       this.onText();
     }

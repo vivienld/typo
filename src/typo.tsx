@@ -125,7 +125,7 @@ export default class Typo extends Component<Props, State> {
                 }
             }
 
-            this.textRefs[this.iteration]?.current?.play();
+            this.textRefs[this.iteration]?.current?.run();
 
             this.iteration += this.props.rewind ? -1 : 1;
             this.onText();

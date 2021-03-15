@@ -68,23 +68,23 @@ export default class Text extends Component<Props, State> {
     componentDidMount() {
         if (!this.props.parent) {
             this.init();
-            this.play();
+            this.run();
         }
     }
 
 
     init() {
-        const pause = this.props.pause || this.props.parent?.props.pause || defaultPause;
-
-
         this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
         this.stopped = false;
-
+    }
+    
+    run() {
+        const pause = this.props.pause || this.props.parent?.props.pause || defaultPause;
         setTimeout(() => {
             this.updateInterval();
         }, pause);
     }
-    
+
     updateInterval() {
         clearInterval(this.timeout);
         let pace = this.str[this.iteration] != '\xa0'
@@ -123,6 +123,7 @@ export default class Text extends Component<Props, State> {
                         (!rewind && this.iteration > this.str.length)
                     ) {
                         this.stop();
+                        console.log('stop' + this.str)
                     } else {
                         this.onChar();
                     }
@@ -141,6 +142,7 @@ export default class Text extends Component<Props, State> {
 
     replay() {
         this.init();
+        this.run();
     }
 
     show() {
@@ -153,6 +155,7 @@ export default class Text extends Component<Props, State> {
         if (this.props.loop) {
             this.replay();
         } else {
+            this.stopped = true;
             this.onStop();
         }
     }
@@ -173,7 +176,6 @@ export default class Text extends Component<Props, State> {
     }
 
     onStop() {
-        this.stopped = true;
         this.props.onStop?.(this);
         this.props?.parent?.play();
     }

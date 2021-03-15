@@ -14,16 +14,19 @@ class Text extends Component {
   componentDidMount() {
     if (!this.props.parent) {
       this.init();
-      this.play();
+      this.run();
     }
   }
 
   init() {
+    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
+    this.stopped = false;
+  }
+
+  run() {
     var _this$props$parent;
 
     const pause = this.props.pause || ((_this$props$parent = this.props.parent) === null || _this$props$parent === void 0 ? void 0 : _this$props$parent.props.pause) || defaultPause;
-    this.iteration = !this.props.rewind ? 0 : this.str.length - 1;
-    this.stopped = false;
     setTimeout(() => {
       this.updateInterval();
     }, pause);
@@ -79,6 +82,7 @@ class Text extends Component {
 
           if (rewind && this.iteration < -1 || !rewind && this.iteration > this.str.length) {
             this.stop();
+            console.log('stop' + this.str);
           } else {
             this.onChar();
           }
@@ -101,6 +105,7 @@ class Text extends Component {
 
   replay() {
     this.init();
+    this.run();
   }
 
   show() {
@@ -116,6 +121,7 @@ class Text extends Component {
     if (this.props.loop) {
       this.replay();
     } else {
+      this.stopped = true;
       this.onStop();
     }
   }
@@ -138,7 +144,6 @@ class Text extends Component {
   onStop() {
     var _this$props$onStop, _this$props3, _this$props4, _this$props4$parent;
 
-    this.stopped = true;
     (_this$props$onStop = (_this$props3 = this.props).onStop) === null || _this$props$onStop === void 0 ? void 0 : _this$props$onStop.call(_this$props3, this);
     (_this$props4 = this.props) === null || _this$props4 === void 0 ? void 0 : (_this$props4$parent = _this$props4.parent) === null || _this$props4$parent === void 0 ? void 0 : _this$props4$parent.play();
   }
@@ -228,7 +233,7 @@ class Typo extends Component {
         }
       }
 
-      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.play();
+      (_this$textRefs$this$i = this.textRefs[this.iteration]) === null || _this$textRefs$this$i === void 0 ? void 0 : (_this$textRefs$this$i2 = _this$textRefs$this$i.current) === null || _this$textRefs$this$i2 === void 0 ? void 0 : _this$textRefs$this$i2.run();
       this.iteration += this.props.rewind ? -1 : 1;
       this.onText();
     }
