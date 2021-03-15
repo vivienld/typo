@@ -12,15 +12,8 @@ body {
   font-family: Roboto,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color:rgba(211, 255, 129, 0.164);
 }
-
-
-.wave {animation:wave .5s ease-in-out 1;}
-.swirl-in-fwd{animation:swirl-in-fwd .25s ease-out both}
-
-.wave-infinite{animation:wave 1.5s ease-in-out infinite}
-
-.roll-in-left{-webkit-animation:roll-in-left .6s ease-out both;animation:roll-in-left .6s ease-out both}
 
 .main{
   min-height:100%;
@@ -86,10 +79,14 @@ body {
 }
 
 .under-contruction{
+  padding:1rem;
+  width:70%;
+  transform: rotateZ(1deg);
+  background-color:rgb(255, 255, 255);
+  box-shadow: .2rem .2rem .05rem  rgb(221, 125, 0);
+  color:  rgb(255, 145, 0);
   display: flex !important;
   align-items: center;
   justify-content: center;
-  
-  font-family: "Sans Source Pro", sans-serif;
   font-size: 3vw;
 }
