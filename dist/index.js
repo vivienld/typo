@@ -124,7 +124,8 @@ var Text = /*#__PURE__*/function (_Component) {
           _this2.setState({
             display: React__default.createElement("span", {
               style: spanStyle,
-              className: _this2.props.charClassName
+              className: _this2.props.charClassName,
+              key: Date.now()
             }, _this2.str)
           }, function () {
             _this2.iteration = rewind ? 0 : _this2.props.children.length - 1;

@@ -92,7 +92,8 @@ class Text extends Component {
           this.setState({
             display: React.createElement("span", {
               style: spanStyle,
-              className: this.props.charClassName
+              className: this.props.charClassName,
+              key: Date.now()
             }, this.str)
           }, () => {
             this.iteration = rewind ? 0 : this.props.children.length - 1;

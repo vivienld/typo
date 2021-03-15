@@ -123,7 +123,7 @@ export default class Text extends Component<Props, State> {
                     })
                 } else {
                     this.setState({
-                        display: <span style={spanStyle} className={this.props.charClassName}>{this.str}</span>
+                        display: <span style={spanStyle} className={this.props.charClassName} key={Date.now()}>{this.str}</span>
                     }, () => {
                         this.iteration = rewind ? 0 : (this.props.children as string).length - 1;
                         this.onChar();
