@@ -1,5 +1,7 @@
+import 'bulma/css/bulma.min.css'
 import './animation.css'
-import './index.css'
+import './index.module.scss'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'

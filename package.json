@@ -1,6 +1,6 @@
 {
   "name": "reactypo",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Reactypo is a react library that makes it easy to control and animate text.",
   "author": "vivienld",
   "license": "MIT",
@@ -35,7 +35,6 @@
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
-    "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "gh-pages": "^2.2.0",
     "microbundle-crl": "^0.13.10",
