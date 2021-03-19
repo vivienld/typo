@@ -1,37 +1,45 @@
 {
-  "name": "typo-example",
-  "homepage": ".",
-  "version": "0.0.0",
+  "name": "example",
+  "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
-    "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
-    "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
-    "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
-  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "@types/node": "link:../node_modules/@types/node",
-    "@types/react": "link:../node_modules/@types/react",
-    "@types/react-dom": "link:../node_modules/@types/react-dom",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/material-ui": "^0.21.8",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "@types/react-syntax-highlighter": "^13.5.0",
     "bulma": "^0.9.2",
-    "font-awesome": "^4.7.0",
+    "bulma-react-components": "^1.0.2",
     "jsx-to-string": "^1.4.0",
-    "node-sass": "^5.0.0",
-    "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom",
-    "react-element-to-jsx-string": "^14.3.2",
-    "react-scripts": "link:../node_modules/react-scripts",
+    "material-ui": "^0.20.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.3",
     "react-syntax-highlighter": "^15.4.3",
+    "react-timeout": "^2.0.1",
     "reactypo": "link:..",
-    "typescript": "link:../node_modules/typescript"
+    "sass": "^1.32.8",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1"
   },
-  "devDependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [

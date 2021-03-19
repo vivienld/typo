@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Typo } from 'reactypo'
-import ExampleCard from './example.card'
+import ExampleCard from './example-card'
 
 const App = () => {
   return (
@@ -16,9 +16,9 @@ const App = () => {
         <h2 className="description title is-12">Reactypo is a react component that gives a typewriter effect to your text</h2>
       </div>
 
-      <ExampleCard title="test"
-        description='description test'
-        code={<Text>I am a Text component without props</Text>}
+      <ExampleCard title="A simple <Text /> Component"
+        description='The <Text /> component is the base component to gie your text a type-writer effect'
+        code={<Text>I am a &lt;Text /&gt; component without props</Text>}
       />
     </main>
   )
