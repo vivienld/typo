@@ -73,6 +73,10 @@ export default class Typo extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+
+        if (props.first) {
+            Typo.first = this;
+        }
         this.init();
     }
 
@@ -103,10 +107,6 @@ export default class Typo extends Component<Props, State> {
         this.name = this.props.name || '_' + Math.random().toString(36).substr(2, 9);
 
         Typo.typos.set(this.name, this);
-
-        if (typeof Typo.first == 'undefined') {
-            Typo.first = this;
-        }
     }
 
     play() {
@@ -160,6 +160,7 @@ export default class Typo extends Component<Props, State> {
     onStop() {
         this.props.onStop?.(this);
         if (this.props.next) {
+            Typo.typos.get(this.props.next)?.init();
             Typo.typos.get(this.props.next)?.play();
         }
     }

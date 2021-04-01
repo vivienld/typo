@@ -5,7 +5,7 @@ const App = () => {
   return (
     <main className='main'>
 
-      <Typo className='header' name={'title'} next='under-contruction' first>
+      <Typo className='header' name={'title'} next='under-contruction'>
         <Text pace={100} charClassName="wave-infinite title-char" className="header-title" stamp>Reactypo</Text>
         <Text pause={200} charClassName="wave-infinite" className="header-title title2" stamp>Reactypo</Text>
         <Text pause={500} whiteSpacePace={100} charClassName=" sub-title-char" className={'sub-title'} block>animate and control text</Text>
@@ -102,7 +102,7 @@ const App = () => {
       />
 
       {/** Typo */}
-      <ExampleCard title="The <Typo /> Component"
+      <ExampleCard title="The Typo Component"
         description='You may have seen in the "Text as a Stamp" example that the <Text /> components were following each others. 
         This is due to the <Typo /> component. A <Text /> component in a <Typo /> will wait the end of the previous one.'
         demo={
@@ -121,19 +121,17 @@ const App = () => {
       />
 
       {/** Ordre d'appel */}
-      <ExampleCard title="Order your <Typo />"
+      <ExampleCard title="Order your Typos"
         description='The <Typo /> component has a "name" props that will identify it. 
         The "next" props will reference the next <Typo /> to be called and tell it to wait the end of the one referencing it.'
         demo={
           <>
             <div>
-
               <Typo name="first" next="third">
                 <Text block>I'm the first typo and will call the third typo</Text>
               </Typo>
             </div>
             <div>
-
               <Typo name="second">
                 <Text block>I'm the second Typo. Everything ends with me.</Text>
               </Typo>
@@ -146,11 +144,68 @@ const App = () => {
           </>
         }
         code={`
-        <Typo>
-            <Text >I'm the first text. </Text>
-            <Text >I'm the second. </Text>
-            <Text >I'm the third. </Text>
-          </Typo>
+        <>
+            <div>
+              <Typo name="first" next="third">
+                <Text block>I'm the first typo and will call the third typo</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="second">
+                <Text block>I'm the second Typo. Everything ends with me.</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="third" next="second">
+                <Text block>I'm the third typo and will call the second typo</Text>
+              </Typo>
+            </div>
+          </>
+        `}
+      />
+
+      {/** Boucler */}
+      <ExampleCard title="Looping over Typos"
+        description='If the "next" props defines which Typo will have to wait the previous one 
+        and that the first Typo is referenced in a "next" props too, which Typo starts the chain?
+        The "first" props is here to help!'
+        demo={
+          <>
+            <div>
+              <Typo name="first_2" next="third_2" first>
+                <Text block>I'm the first typo and will call the third typo</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="second_2" next="first_2">
+                <Text block>I'm the second Typo. Everything ends with me.</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="third_2" next="second_2">
+                <Text block>I'm the third typo and will call the second typo</Text>
+              </Typo>
+            </div>
+          </>
+        }
+        code={`
+        <>
+            <div>
+              <Typo name="first_2" next="third_2" first>
+                <Text block>I'm the first typo and will call the third typo</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="second_2" next="first_2">
+                <Text block>I'm the second Typo. Everything ends with me.</Text>
+              </Typo>
+            </div>
+            <div>
+              <Typo name="third_2" next="second_2">
+                <Text block>I'm the third typo and will call the second typo</Text>
+              </Typo>
+            </div>
+          </>
         `}
       />
 
