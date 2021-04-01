@@ -209,6 +209,13 @@ const App = () => {
         `}
       />
 
+      {/** Styling */}
+      <ExampleCard title="Styling"
+        description={`Every printed char can be styled through the "charClassName" props of a Text component`}
+        demo={<Text pace={100} charClassName="bounce-in-top">So much style! I love it.</Text>}
+        code={`<Text rewind>ok bye! What's going on????</Text>`}
+      />
+
     </main>
   )
 }
